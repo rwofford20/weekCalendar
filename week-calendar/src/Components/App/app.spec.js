@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import App from './App';
+import Calendar from '../Calendar/Calendar';
 
 describe ('App', () => {
     let wrapper; 
