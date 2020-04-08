@@ -14,4 +14,8 @@ describe ('App', () => {
     it('should render correctly', () => {
         expect(wrapper).toMatchSnapshot()
     });
+
+    it('should render a Calendar component', () => {
+        expect(wrapper.containsMatchingElement(<Calendar />)).toEqual(true);
+    });
 });
