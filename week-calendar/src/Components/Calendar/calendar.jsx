@@ -3,7 +3,7 @@ import './calendar.css';
 
 class Calendar extends Component{
     render = () => {
-        <div className = 'calendar-container'></div>
+        return (<div className = 'calendar-container'></div>);
     };
 }
 
