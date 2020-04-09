@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import './Day.css';
 
-class Day extends Component{
-    render = () => {
-        return(<div className='day-container'></div>)
-    };
-};
+const Day = ({numericDay}) => (
+    <div className = 'day-container'>
+        {numericDay}
+    </div>
+);
 
 export default Day;

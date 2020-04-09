@@ -14,4 +14,9 @@ describe('Day', () => {
     it('should render a div', () => {
         expect(wrapper.find('div').length).toEqual(1);
     });
+
+    it('should render the date value', () => {
+        wrapper.setProps({ numericDay: '32'});
+        expect(wrapper.text()).toEqual('32');
+    });
 });
