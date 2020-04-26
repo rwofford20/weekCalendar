@@ -19,4 +19,8 @@ describe('Day', () => {
         wrapper.setProps({ numericDay: '32'});
         expect(wrapper.text()).toEqual('32');
     });
+    
+    it('should render a time block', () => {
+        expect(wrapper.find('TimeBlock').length).toEqual(1);
+    });
 });
