@@ -4,8 +4,7 @@ import './TimeBlock.css';
 const TimeBlock = (props) => (
     <div className='timeblock-container'>
         <div className='timeblock-title-container'>{props.title}</div>
-        {props.startTime}
-        {props.endTime}
+        <div className='timeblock-time-container'>{props.startTime} - {props.endTime}</div>
     </div>
 );
 

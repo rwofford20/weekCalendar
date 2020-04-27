@@ -15,6 +15,7 @@ describe('TimeBlock', () => {
         expect(wrapper.find('div.timeblock-container').length).toEqual(1);
     });
 
+    /* No longer nexessary - more thorough tests exist
     it('it should render a title', () => {
         wrapper.setProps({ title: 'Sample'});
         expect(wrapper.text()).toEqual('Sample');
@@ -29,10 +30,22 @@ describe('TimeBlock', () => {
         wrapper.setProps({ endTime: '1000'});
         expect(wrapper.text()).toEqual('1000');
     });
+    */
 
     it('should render the meeting title in the first child div', () => {
         wrapper.setProps({title: 'Meet with Malcolm Reynolds', startTime: 1245, endTime: 1345});
         expect(wrapper.find('div.timeblock-container').children('.timeblock-title-container').at(0).text()).toEqual(
             "Meet with Malcolm Reynolds");
     });
+
+    it('should render a div with the class timeblock-time-container', () => {
+        expect(wrapper.find('div.timeblock-time-container').length).toEqual(1);
+    });
+
+    it('should render the meeting time in the format: startTime - endTime', () => {
+        wrapper.setProps({title: 'Meet with Malcolm Reynolds', startTime: 1245, endTime: 1345});
+        expect(wrapper.find('div.timeblock-container').children('.timeblock-time-container').at(0).text()).toEqual(
+            "1245 - 1345");
+    });
+
 });
