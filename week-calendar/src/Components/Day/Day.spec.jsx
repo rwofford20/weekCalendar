@@ -3,6 +3,14 @@ import { shallow, mount } from 'enzyme';
 import Day from './Day';
 import TimeBlock from '../TimeBlock/TimeBlock';
 
+function convertIntToTimeString(intHour) {
+    let strHour = intHour.toString() + '00';
+    if (intHour < 10) {
+        strHour = '0' + strHour;
+    }
+    return strHour;
+}
+
 describe('Day', () => {
     let wrapper; 
 
@@ -34,4 +42,20 @@ describe('Day', () => {
         const timeBlockTimes = firstTimeBlock.find('.timeblock-time-container');
         expect(timeBlockTimes.text()).toEqual('0800 - 0900');
     });
+
+    it('should render sequential time blocks when no parameters are passed', () => {
+        wrapper = mount(<Day />);
+        const timeBlocks = wrapper.children('div.day-container').at(0).children('TimeBlock');
+        //expect(timeBlocks.length).toEqual(12)
+        let timeBlock, startTime, endTime, timeRange, theoreticalTimeRange;
+        for (let ndx = 0; ndx < timeBlocks.length; ndx++) {
+            timeBlock = timeBlocks.at(ndx);
+            timeRange = timeBlock.find('div.timeblock-time-container').text();
+            startTime = convertIntToTimeString(ndx + 8);
+            endTime = convertIntToTimeString(ndx + 9);
+            theoreticalTimeRange = startTime + ' - ' + endTime;
+            expect(timeRange).toEqual(theoreticalTimeRange);
+        }
+    
+    })
 });
