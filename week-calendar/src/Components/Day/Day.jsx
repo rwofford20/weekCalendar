@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import TimeBlock from '../TimeBlock/TimeBlock';
 import './Day.css';
 
@@ -26,14 +27,9 @@ function generateTimeBlocks(startTime, endTime) {
 }
 
 class Day extends Component{ 
-    state = {
-        timeBlocks: generateTimeBlocks(800, 2000),
-    };
-
-    addTimeBlock = (title, startTime, endTime) => {
-        let updatedTimeBlocks=this.state.timeBlocks;
-        updatedTimeBlocks.push(<TimeBlock title={title} startTime={startTime} endTime={endTime}/>);
-        this.setState({timeBlocks:updatedTimeBlocks});
+    constructor(props) {
+        super(props);
+        this.state = {timeBlocks: generateTimeBlocks(800, 2000)};
     };
     
     render = () => {
@@ -43,5 +39,7 @@ class Day extends Component{
          </div>
     )};
 };
+
+Day.propTypes = {addTimeBlock:PropTypes.func.isRequired};
 
 export default Day;
