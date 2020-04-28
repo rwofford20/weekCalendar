@@ -27,8 +27,12 @@ describe('Day', () => {
     });
 
     it('should render the first time block with start time of 0800 - 0900 when no parameters are passed', () => {
-        expect(wrapper.find('div.day-container').children('TimeBlock').at(0).find('div.timeblock-container')
-        .children('.timeblock-time-container').text()).toEqual('0800 - 0900');
+        const timeBlocks = wrapper.find('div.day-container').children('TimeBlock');
+        expect(timeBlocks.length).toEqual(12);
+        expect(wrapper.find('div.day-container').children('TimeBlock').length).toEqual(12);
+        //expect(firstTimeBlock.children('div.timeblock-container').length).toEqual(1);
+        //const timeBlockTimes = firstTimeBlock.find('.timeblock-time-container');
+        //expect(timeBlockTimes.text()).toEqual('0800 - 0900');
     });
 
 });

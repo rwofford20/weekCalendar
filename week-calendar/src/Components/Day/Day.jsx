@@ -4,7 +4,7 @@ import './Day.css';
 
 const Day = () => (
     <div className = 'day-container'>
-        <TimeBlock startTime = '0800' endTime = '0900'/>
+        <TimeBlock startTime='0800' endTime='0900'/>
         <TimeBlock />
         <TimeBlock />
         <TimeBlock />
