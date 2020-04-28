@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { shallow, mount } from 'enzyme';
 import Day from './Day';
 import TimeBlock from '../TimeBlock/TimeBlock';
 
@@ -27,12 +27,11 @@ describe('Day', () => {
     });
 
     it('should render the first time block with start time of 0800 - 0900 when no parameters are passed', () => {
-        const timeBlocks = wrapper.find('div.day-container').children('TimeBlock');
-        expect(timeBlocks.length).toEqual(12);
-        expect(wrapper.find('div.day-container').children('TimeBlock').length).toEqual(12);
-        //expect(firstTimeBlock.children('div.timeblock-container').length).toEqual(1);
-        //const timeBlockTimes = firstTimeBlock.find('.timeblock-time-container');
-        //expect(timeBlockTimes.text()).toEqual('0800 - 0900');
+        wrapper = mount(<Day />);
+        const firstTimeBlock = wrapper.find('div.day-container').children('TimeBlock').at(0);
+        //const firstActualTimeBlock = timeBlocks.get(0);
+        //expect(firstActualTimeBlock.props.startTime).toEqual('0800');
+        const timeBlockTimes = firstTimeBlock.find('.timeblock-time-container');
+        expect(timeBlockTimes.text()).toEqual('0800 - 0900');
     });
-
 });
