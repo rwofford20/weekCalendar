@@ -57,5 +57,11 @@ describe('Day', () => {
             expect(timeRange).toEqual(theoreticalTimeRange);
         }
     
+    });
+
+    it('should add a time block', () => {
+        let day = wrapper.instance();
+        day.addTimeBlock('Meeting with Pete', '1200', '0100');
+        expect(wrapper.find('TimeBlock').length).toEqual(13);
     })
 });

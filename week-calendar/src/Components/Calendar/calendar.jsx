@@ -20,12 +20,6 @@ class Calendar extends Component{
            <Day
                 numericDay={5}
            />
-           <Day
-                numericDay={6}
-           />
-           <Day
-                numericDay={7}
-           />
 
        </div>);
    };

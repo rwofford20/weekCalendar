@@ -15,8 +15,8 @@ describe('Calendar', () => {
         expect(wrapper.find('div').length).toEqual(1);
     });
 
-    it('should render 7 days', () => {
-        expect(wrapper.find('Day').length).toEqual(7);
+    it('should render 5 days', () => {
+        expect(wrapper.find('Day').length).toEqual(5);
     });
 
 });

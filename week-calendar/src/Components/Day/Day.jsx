@@ -25,10 +25,23 @@ function generateTimeBlocks(startTime, endTime) {
     return timeBlocks;
 }
 
-const Day = () => (
-    <div className = 'day-container'>
-        {generateTimeBlocks(800, 2000)}
-    </div>
-);
+class Day extends Component{ 
+    state = {
+        timeBlocks: generateTimeBlocks(800, 2000),
+    };
+
+    addTimeBlock = (title, startTime, endTime) => {
+        let updatedTimeBlocks=this.state.timeBlocks;
+        updatedTimeBlocks.push(<TimeBlock title={title} startTime={startTime} endTime={endTime}/>);
+        this.setState({timeBlocks:updatedTimeBlocks});
+    };
+    
+    render = () => {
+        return(
+            <div className = 'day-container'>
+                {this.state.timeBlocks}
+         </div>
+    )};
+};
 
 export default Day;
