@@ -1,6 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import Day from './Day';
+import TimeBlock from '../TimeBlock/TimeBlock';
 
 describe('Day', () => {
     let wrapper; 
@@ -21,7 +22,13 @@ describe('Day', () => {
         expect(wrapper.text()).toEqual('32');
     });*/
     
-    it('should render a time block', () => {
-        expect(wrapper.find('TimeBlock').length).toEqual(1);
+    it('should render 12 time blocks', () => {
+        expect(wrapper.find('TimeBlock').length).toEqual(12);
     });
+
+    it('should render the first time block with start time of 0800 - 0900 when no parameters are passed', () => {
+        expect(wrapper.find('div.day-container').children('TimeBlock').at(0).find('div.timeblock-container')
+        .children('.timeblock-time-container').text()).toEqual('0800 - 0900');
+    });
+
 });

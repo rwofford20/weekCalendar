@@ -2,9 +2,19 @@ import React, { Component } from 'react';
 import TimeBlock from '../TimeBlock/TimeBlock';
 import './Day.css';
 
-const Day = ({numericDay}) => (
+const Day = () => (
     <div className = 'day-container'>
-        {numericDay}
+        <TimeBlock startTime = '0800' endTime = '0900'/>
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
+        <TimeBlock />
         <TimeBlock />
     </div>
 );
