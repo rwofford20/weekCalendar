@@ -63,5 +63,16 @@ describe('Day', () => {
         let day = wrapper.instance();
         day.addTimeBlock('Meeting with Pete', '1200', '0100');
         expect(wrapper.find('TimeBlock').length).toEqual(13);
-    })
+    });
+
+    it('should have an ID equal to the startTime', () => {
+        wrapper = mount(<Day />);
+        const timeBlockList = wrapper.children('div.day-container').at(0).children('TimeBlock');
+        timeBlockList.forEach((node) => {
+            expect(node.key()).toEqual(node.prop('startTime'));
+            //expect(node.key()).toEqual('0800');
+        });
+
+
+    });
 });

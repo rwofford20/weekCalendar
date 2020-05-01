@@ -15,7 +15,8 @@ class Calendar extends Component{
           //let newDay = <Day />;
           //newDay.addTimeBlock('Meet with Pete','0700', '0800');
 
-          return (<div className = 'calendar-container'>
+          return (
+          <div className = 'calendar-container'>
                <Day>
                     numericDay={1}
                </Day>
