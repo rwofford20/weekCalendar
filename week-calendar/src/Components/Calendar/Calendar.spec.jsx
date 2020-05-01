@@ -1,5 +1,5 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount, shallow } from 'enzyme';
 import Calendar from './Calendar';
 
 describe('Calendar', () => {
@@ -17,6 +17,15 @@ describe('Calendar', () => {
 
     it('should render 5 days', () => {
         expect(wrapper.find('Day').length).toEqual(5);
+    });
+
+    it('Each Day should have an ID corresponding to the day of the week', () => {
+        const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+        wrapper = mount(<Calendar />);
+        const dayList = wrapper.children('div.calendar-container').at(0).children('Day');
+        for (let ndx = 0; ndx < dayList.length; ndx++) {
+            expect(dayList.at(ndx).key()).toEqual(weekdays[ndx]);
+        }
     });
 
 });

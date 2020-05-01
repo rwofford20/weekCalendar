@@ -41,6 +41,6 @@ class Day extends Component{
     )};
 };
 
-Day.propTypes = {addTimeBlock:PropTypes.func.isRequired};
+//Day.propTypes = {addTimeBlock:PropTypes.func.isRequired};
 
 export default Day;
