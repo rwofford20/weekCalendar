@@ -59,19 +59,24 @@ describe('Day', () => {
     
     });
 
-    // it('should add a time block', () => {
-    //     let day = wrapper.instance();
-    //     day.addTimeBlock('Meeting with Pete', '1200', '0100');
-    //     expect(wrapper.find('TimeBlock').length).toEqual(13);
-    // });
+    it('should add a time block', () => {
+        let day = wrapper.instance();
+         day.addTimeBlock('Meeting with Pete', '1200', '0100');
+         expect(wrapper.find('TimeBlock').length).toEqual(13);
+     });
 
-    it('should have an ID equal to the startTime', () => {
+    it('should have an ID equal to the index', () => {
         wrapper = mount(<Day />);
         const timeBlockList = wrapper.children('div.day-container').at(0).children('TimeBlock');
-        timeBlockList.forEach((node) => {
-            expect(node.key()).toEqual(node.prop('startTime'));
+        for (let ndx =0; ndx < timeBlockList.length; ndx++) {
+            expect(timeBlockList.at(ndx).key()).toEqual(ndx.toString());
+        };
+        //timeBlockList.forEach((node) => {
+            //expect(node.key()).toEqual(node.prop('key'));
             //expect(node.key()).toEqual('0800');
-        });
+        //});
     });
+
+
 
 });

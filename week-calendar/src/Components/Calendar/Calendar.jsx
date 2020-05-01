@@ -14,12 +14,6 @@ function generateDays(numDays) {
 
 class Calendar extends Component{
 
-     // addTimeBlock = (title, startTime, endTime) => {
-     //      let updatedTimeBlocks=this.state.timeBlocks;
-     //      updatedTimeBlocks.push(<TimeBlock title={title} startTime={startTime} endTime={endTime}/>);
-     //      this.setState({timeBlocks:updatedTimeBlocks});
-     //  };
-
      constructor(props) {
           super(props);
           this.state = {days: generateDays(5)};

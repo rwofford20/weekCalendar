@@ -21,7 +21,7 @@ function generateTimeBlocks(startTime, endTime) {
     const timeArray = generateTimes(startTime, endTime);
     let timeBlocks = [];
     for (let ndx = 0; ndx < timeArray.length - 1; ndx++) {
-        timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={timeArray[ndx]}/>);
+        timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx}/>);
     }
     return timeBlocks;
 }
@@ -29,8 +29,21 @@ function generateTimeBlocks(startTime, endTime) {
 class Day extends Component{ 
     constructor(props) {
         super(props);
-        this.state = {timeBlocks: generateTimeBlocks(800, 2000)};
-        
+        this.state = {timeBlocks: generateTimeBlocks(800, 2000)};    
+    };
+
+    addTimeBlock = (title, startTime, endTime) => {
+        let updatedTimeBlocks=this.state.timeBlocks;
+        let arrayLength = updatedTimeBlocks.length; 
+        updatedTimeBlocks.push(<TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength}/>);
+        this.setState({timeBlocks:updatedTimeBlocks});
+    };
+
+    componentDidUpdate(prevProps) {
+        if(prevProps.newTimeBlockData !== this.props.newTimeBlockData){
+            this.addTimeBlock(newTitle = {title}, newStartTime={startTime});
+            //need to set parameters for addTimeBlock to be what is being passed in
+        }
     };
     
     render = () => {
