@@ -29,19 +29,7 @@ describe('Day', () => {
         wrapper.setProps({ numericDay: '32'});
         expect(wrapper.text()).toEqual('32');
     });*/
-    
-    it('should render 12 time blocks', () => {
-        expect(wrapper.find('TimeBlock').length).toEqual(12);
-    });
 
-    it('should render the first time block with start time of 0800 - 0900 when no parameters are passed', () => {
-        wrapper = mount(<Day />);
-        const firstTimeBlock = wrapper.find('div.day-container').children('TimeBlock').at(0);
-        //const firstActualTimeBlock = timeBlocks.get(0);
-        //expect(firstActualTimeBlock.props.startTime).toEqual('0800');
-        const timeBlockTimes = firstTimeBlock.find('.timeblock-time-container');
-        expect(timeBlockTimes.text()).toEqual('0800 - 0900');
-    });
 
     it('should render sequential time blocks when no parameters are passed', () => {
         wrapper = mount(<Day />);
@@ -59,12 +47,6 @@ describe('Day', () => {
     
     });
 
-    it('should add a time block', () => {
-        let day = wrapper.instance();
-         day.addTimeBlock('Meeting with Pete', '1200', '0100');
-         expect(wrapper.find('TimeBlock').length).toEqual(13);
-     });
-
     it('should have an ID equal to the index', () => {
         wrapper = mount(<Day />);
         const timeBlockList = wrapper.children('div.day-container').at(0).children('TimeBlock');
@@ -76,6 +58,17 @@ describe('Day', () => {
             //expect(node.key()).toEqual('0800');
         //});
     });
+
+    it('should create a new timeBlock when new data is added', () => {
+        wrapper = mount(<Day />);
+        wrapper.setProps({TimeBlock: {title: 'Meeting with Leslie Knope', startTime: '2200', endTime: '2300'}});
+        expect(wrapper.find('TimeBlock').length).toEqual(13);
+        let lastTimeBlock = wrapper.find('.day-container').first().children('TimeBlock').last();
+        let lastTimeBlockTitle = lastTimeBlock.find('.timeblock-title-container').text();
+        expect(lastTimeBlockTitle).toEqual('Meeting with Leslie Knope');
+        let lastTimeBlockStartTime = lastTimeBlock.find('.timeblock-time-container').text();
+        expect(lastTimeBlockStartTime).toEqual('1100 - 1200');
+    })
 
 
 
