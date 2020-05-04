@@ -58,18 +58,4 @@ describe('Day', () => {
             //expect(node.key()).toEqual('0800');
         //});
     });
-
-    it('should create a new timeBlock when new data is added', () => {
-        wrapper = mount(<Day />);
-        wrapper.setProps({TimeBlock: {title: 'Meeting with Leslie Knope', startTime: '2200', endTime: '2300'}});
-        expect(wrapper.find('TimeBlock').length).toEqual(13);
-        let lastTimeBlock = wrapper.find('.day-container').first().children('TimeBlock').last();
-        let lastTimeBlockTitle = lastTimeBlock.find('.timeblock-title-container').text();
-        expect(lastTimeBlockTitle).toEqual('Meeting with Leslie Knope');
-        let lastTimeBlockStartTime = lastTimeBlock.find('.timeblock-time-container').text();
-        expect(lastTimeBlockStartTime).toEqual('1100 - 1200');
-    })
-
-
-
 });

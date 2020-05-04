@@ -58,7 +58,6 @@ class Calendar extends Component{
 
       addTimeBlock = (title, startTime, endTime, dayIndex) => {
           let everything=this.state.timeBlocksForDays;
-          console.log('Return everything in timeBlocksForDays:' + everything);
           let timeBlocksToUpdate = everything[dayIndex];
           let arrayLength = timeBlocksToUpdate.length; 
           // TODO: Update key generation. If we ever remove a time block we run the risk of duplicate keys
@@ -67,8 +66,11 @@ class Calendar extends Component{
                // Update the TimeBlock array in state
                const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
                     if (dayIndex === ndx) {
-                         const longerList = timeBlockList.concat(newTimeBlock);
-                         return longerList;  
+                         // Add the new time block to the correct list
+                         let longerList = timeBlockList.concat(newTimeBlock);
+                         // sort the list based on start times
+                         longerList = longerList.sort((x, y) => (x.props.startTime > y.props.startTime) ? 1 : -1);
+                         return longerList; 
                     }  else {
                          return timeBlockList;
                     }
@@ -83,7 +85,7 @@ class Calendar extends Component{
                          return day;
                     }
                });
-               console.log('Just prior to return from setState days[' + dayIndex + '] has ' + days[dayIndex].props.timeBlocks.length + ' TimeBlocks.');
+               //console.log('Just prior to return from setState days[' + dayIndex + '] has ' + days[dayIndex].props.timeBlocks.length + ' TimeBlocks.');
                return {timeBlocksForDays, days: days};
           });
       };
@@ -91,16 +93,14 @@ class Calendar extends Component{
      render = () => {
           
           return (
-          <div>
-          <div className = 'calendar-container'>
-               {this.state.days}
-          </div>
-          <div onClick={() => this.addTimeBlock('Ron Swanson', '1800', '1900', 1)} >
-               <p>
-                    Add a day!
-               </p>
-          </div>
-          </div>
+               <div className = 'calendar-container'>
+                    {this.state.days}
+               </div>
+               /* <div onClick={() => this.addTimeBlock('Ron Swanson', '1800', '1900', 1)} >
+                    <p>
+                         Add a day!
+                    </p>
+               </div> */
           );
      };
 }

@@ -57,4 +57,21 @@ describe('Calendar', () => {
         //expect(firstDay.find('TimeBlock').length).toEqual(13);
      });
 
+     it('should order time blocks by start time', () => {
+        wrapper = mount(<Calendar />);
+        const dayIndex = 0;
+        let calendar = wrapper.instance();
+        calendar.addTimeBlock('Meeting at JJs Diner', '0700', '0800', dayIndex);
+        calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayIndex);
+        calendar.addTimeBlock('Pick up Discount Meat', '2000', '2100', dayIndex);
+        const testDay = calendar.state.days[dayIndex]; 
+        expect(testDay.props.timeBlocks.length).toEqual(15);
+        // Check each block in testDay to make sure the start times are increasing
+        for (let ndx = 0; ndx < testDay.props.timeBlocks.length - 1; ndx ++) {
+            const currentBlock = testDay.props.timeBlocks[ndx];
+            const nextBlock = testDay.props.timeBlocks[ndx + 1];
+            expect(parseInt(currentBlock.props.startTime)).toBeLessThanOrEqual(parseInt(nextBlock.props.startTime))
+        }
+     });
+
 });
