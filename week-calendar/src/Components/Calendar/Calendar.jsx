@@ -4,18 +4,31 @@ import TimeBlock from '../TimeBlock/TimeBlock';
 import './Calendar.css';
 
 class Calendar extends Component{
-
+     
      constructor(props) {
           super(props);
-          this.state = {days: this.generateDays(5)};
+          let defaultTimeBlocksForDays = [];
+          for (let dayIndex = 0; dayIndex < this.weekdays.length; dayIndex++) {
+               const defaultBlocks = this.generateTimeBlocks(this.defaultDayStartTime, this.defaultDayEndTime)
+               defaultTimeBlocksForDays.push(defaultBlocks);
+          }
+          this.state = {
+               timeBlocksForDays: defaultTimeBlocksForDays,
+               days: this.generateDays(5)
+          };
+
      }
 
+     weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+     defaultDayStartTime = 800;
+     defaultDayEndTime = 2000;
+
      generateDays = (numDays) => {
-          const weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+          
           let days = [];
           for (let ndx = 0; ndx < numDays; ndx ++) {
                let timeBlocks = this.generateTimeBlocks(800, 2000);
-               days.push(<Day timeBlocks={timeBlocks} key={weekdays[ndx % 5]} />);
+               days.push(<Day timeBlocks={timeBlocks} key={this.weekdays[ndx % 5]} />);
           }
           return days;
      };
@@ -44,14 +57,38 @@ class Calendar extends Component{
       };
 
       addTimeBlock = (title, startTime, endTime, dayIndex) => {
-          let updatedTimeBlocks=this.state.days[dayIndex].timeBlocks;
-          let arrayLength = updatedTimeBlocks.length; 
-          updatedTimeBlocks.push(<TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength}/>);
-          this.setState({timeBlocks:updatedTimeBlocks});
+          let everything=this.state.timeBlocksForDays;
+          let timeBlocksToUpdate = everything[dayIndex]
+          let arrayLength = timeBlocksToUpdate.length; 
+          // TODO: Update key generation. If we ever remove a time block we run the risk of duplicate keys
+          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength}/>;
+          this.setState( state => {
+               // Update the TimeBlock array in state
+               const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
+                    if (dayIndex === ndx) {
+                         const longerList = timeBlockList.concat(newTimeBlock);
+                         return longerList;  
+                    }  else {
+                         return timeBlockList;
+                    }
+               });
+               // Using the updated TimeBlock array, update the day array in state.
+               const days = state.days.map( (day, ndx) => {
+                    if (dayIndex === ndx) {
+                         const newDay = <Day timeBlocks={timeBlocksForDays[dayIndex]} key={day.key} />
+                         return newDay;
+                    }
+                    else {
+                         return day;
+                    }
+               });
+               console.log('Just prior to return from setState days[' + dayIndex + '] has ' + days[dayIndex].props.timeBlocks.length + ' TimeBlocks.');
+               return {timeBlocksForDays, days: days};
+          });
       };
 
      render = () => {
-
+          
           return (
           <div className = 'calendar-container'>
                {this.state.days}
