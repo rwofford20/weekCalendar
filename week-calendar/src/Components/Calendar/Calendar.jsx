@@ -58,7 +58,8 @@ class Calendar extends Component{
 
       addTimeBlock = (title, startTime, endTime, dayIndex) => {
           let everything=this.state.timeBlocksForDays;
-          let timeBlocksToUpdate = everything[dayIndex]
+          console.log('Return everything in timeBlocksForDays:' + everything);
+          let timeBlocksToUpdate = everything[dayIndex];
           let arrayLength = timeBlocksToUpdate.length; 
           // TODO: Update key generation. If we ever remove a time block we run the risk of duplicate keys
           const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength}/>;
@@ -90,9 +91,17 @@ class Calendar extends Component{
      render = () => {
           
           return (
+          <div>
           <div className = 'calendar-container'>
                {this.state.days}
-          </div>);
+          </div>
+          <div onClick={() => this.addTimeBlock('Ron Swanson', '1800', '1900', 1)} >
+               <p>
+                    Add a day!
+               </p>
+          </div>
+          </div>
+          );
      };
 }
 
