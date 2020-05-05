@@ -74,4 +74,21 @@ describe('Calendar', () => {
         }
      });
 
+     it('should match the end time of the previous time block to the start time of the new time block', () => {
+         wrapper = mount(<Calendar />);
+         const dayIndex = 0;
+         let calendar = wrapper.instance();
+         calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayIndex);
+         calendar.addTimeBlock('Pick up Discount Meat', '1830', '1900', dayIndex);
+         calendar.addTimeBlock('Pick up Discount Meat', '0930', '1000', dayIndex);
+         const testDay = calendar.state.days[dayIndex]; 
+         //expect(testDay.props.timeBlocks.length).toEqual(13);
+        // Check each block in testDay to make sure consecutive start and end times are contiguous
+        for (let ndx = 0; ndx < testDay.props.timeBlocks.length - 2; ndx ++) {
+            const previousBlock = testDay.props.timeBlocks[ndx];
+            const currentBlock = testDay.props.timeBlocks[ndx + 1];
+            expect(parseInt(previousBlock.props.endTime)).toEqual(parseInt(currentBlock.props.startTime));
+        };
+     });
+
 });
