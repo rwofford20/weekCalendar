@@ -30,7 +30,7 @@ describe('Calendar', () => {
 
     it('should render 12 time blocks', () => {
         wrapper = mount(<Calendar />);
-        let firstDay = wrapper.children('.calendar-container').first().children('Day').first();
+        let firstDay = wrapper.children('div.calendar-container').first().children('Day').first();
         expect(firstDay.find('TimeBlock').length).toEqual(12);
     });
 
