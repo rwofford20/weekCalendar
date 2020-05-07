@@ -5,14 +5,17 @@ import './Calendar.css';
 import { cloneElement } from 'react';
 
 class Calendar extends Component{
-     
+     //Constructor to set the state of the Calendar component
      constructor(props) {
           super(props);
+          //Array containing all of the default time blocks
           let defaultTimeBlocksForDays = [];
+          //Generate 12 default TimeBlocks for each day
           for (let dayIndex = 0; dayIndex < this.weekdays.length; dayIndex++) {
                const defaultBlocks = this.generateTimeBlocks(this.defaultDayStartTime, this.defaultDayEndTime)
                defaultTimeBlocksForDays.push(defaultBlocks);
           }
+          //Set the state using the default time blocks generated above and generate 5 days
           this.state = {
                timeBlocksForDays: defaultTimeBlocksForDays,
                days: this.generateDays(5)
@@ -24,6 +27,10 @@ class Calendar extends Component{
      defaultDayStartTime = 800;
      defaultDayEndTime = 2000;
 
+     //Function to generate a Day component 
+     //Used in the Calendar constructor
+     //Input is the number of days to be created
+     //Output is is a Day component with 12 default time blocks
      generateDays = (numDays) => {
           
           let days = [];
@@ -34,6 +41,10 @@ class Calendar extends Component{
           return days;
      };
 
+     //Function to convert integer time values to a string and add a leading zero if necessary
+     //Used in generateTimes function
+     //Input is an integer value
+     //Output is the above integer value converted to a string
      convertTimeToString = (intTime) => {
           let timeString = intTime.toString();
           if (intTime < 1000) {
@@ -42,12 +53,20 @@ class Calendar extends Component{
           return timeString;
       };
       
+      //Function to generate start and end times for a time block
+      //Used in generateTimeBlocks function
+      //Input is an integer start time and end time
+      //Output is an array of string start and end times
       generateTimes = (startTime, endTime) => {
           let timeArray = Array((endTime / 100) - (startTime / 100) + 1).fill().map((_, ndx) => startTime + 100 * ndx );
           timeArray = timeArray.map((intTime, ndx) => this.convertTimeToString(intTime));
           return timeArray;
       };
       
+      //Function to generate default time blocks for a Day component
+      //Used in the Calendar constructor and the generateDays function
+      //Input is a start and end time
+      //Output is an array of default time blocks with start and end times that increase by the hour
       generateTimeBlocks = (startTime, endTime) => {
           const timeArray = this.generateTimes(startTime, endTime);
           let timeBlocks = [];
@@ -57,6 +76,10 @@ class Calendar extends Component{
           return timeBlocks;
       };
 
+      //Function that adds a specific time block to a Day component
+      //Currently used in the return statement of Calendar.jsx
+      //Input is the title, start time, end time, and day for a time block that is to be added to a day
+      //Output is that time block added to the pre-existing array of time blocks for that day
       addTimeBlock = (title, startTime, endTime, dayIndex) => {
           let everything=this.state.timeBlocksForDays;
           let timeBlocksToUpdate = everything[dayIndex];
@@ -76,14 +99,14 @@ class Calendar extends Component{
                          //console.log('TimeBlockList 11: ' + timeBlockList[11].props.startTime);
                          while(parseInt(timeBlockList[foo].props.startTime) < parseInt(newTimeBlock.props.startTime)) {
                               foo++;
-                              console.log('foo: ' + foo + 'TimeBlockList foo: ' + timeBlockList[foo].props.startTime) ;
+                              //console.log('foo: ' + foo + 'TimeBlockList foo: ' + timeBlockList[foo].props.startTime) ;
                          }
                          console.log('While loop terminated');
                          const left = timeBlockList.slice(0, foo);
                          const right = timeBlockList.slice(foo);
                          
                          let longerList = left.concat(newTimeBlock,right); 
-                         console.log('Built longerList');
+                         //console.log('Built longerList');
 
                          // time block has been inserted
                          // If the timeblock is not the first thing in the list, update its predecessor
@@ -94,13 +117,13 @@ class Calendar extends Component{
                               if (parseInt(newTimeBlock.props.startTime) < parseInt(previousTimeBlock.props.endTime)){
                                    //previousTimeBlock.props.endTime = newTimeBlock.props.startTime;
                                    longerList[foo-1] = cloneElement(previousTimeBlock, {endTime: newTimeBlock.props.startTime});
-                                   console.log('Cloned element with endTime: ' + longerList[foo-1].props.endTime);
+                                   //console.log('Cloned element with endTime: ' + longerList[foo-1].props.endTime);
                               }
                          }
                          // If the new timeblock is not the last thing in the list, update its successor(s)
                          let nextTimeBlock
                          if (foo < longerList.length - 1) {
-                              console.log('Checking the next time block');
+                              //console.log('Checking the next time block');
                               nextTimeBlock = longerList[foo + 1];
                               while (foo < (longerList.length - 1) && (parseInt(newTimeBlock.props.endTime) > parseInt(nextTimeBlock.props.startTime))) {                                   
                                    // If the new time block completely subsumes a successor, destroy the successor.
@@ -122,7 +145,7 @@ class Calendar extends Component{
                                    nextTimeBlock = longerList[foo + 1];
                               }
                          }
-                         console.log('about to return longerList');
+                         //console.log('about to return longerList');
                          return longerList; 
                     }  else {
                          return timeBlockList;
@@ -138,13 +161,15 @@ class Calendar extends Component{
                          return day;
                     }
                });
-               console.log('Just prior to return from setState days[' + dayIndex + '] has ' + days[dayIndex].props.timeBlocks.length + ' TimeBlocks.');
+               //console.log('Just prior to return from setState days[' + dayIndex + '] has ' + days[dayIndex].props.timeBlocks.length + ' TimeBlocks.');
                return {timeBlocksForDays, days: days};
           });
       };
 
      render = () => {
           
+          //Originally returns a defualt calendar
+          //Adds a meeting to a specified when the 'Add a meeting!' button is clicked
           return (
                <div>
                     <div className = 'calendar-container'>
@@ -152,7 +177,7 @@ class Calendar extends Component{
                     </div>
                     <div onClick={() => this.addTimeBlock('Ron Swanson', '1230', '1430', 1)} >
                          <p>
-                              Add a day!
+                              Add a meeting!
                          </p>
                     </div>  
                </div>
