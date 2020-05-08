@@ -103,18 +103,19 @@ describe('Calendar', () => {
      it('should match the end time of the previous time block to the start time of the new time block', () => {
          wrapper = mount(<Calendar />);
          const dayIndex = 0;
-         //Create an instance of the Calendar component and add 3 different TieBlocks to the same day
+         //Create an instance of the Calendar component and add 3 different time blocks to the same day
          let calendar = wrapper.instance();
-         calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayIndex);
-         calendar.addTimeBlock('Pick up Discount Meat', '1830', '1900', dayIndex);
-         calendar.addTimeBlock('Pick up Discount Meat', '0930', '1000', dayIndex);
-         //Get the state of the calenddar on a specific day
+         calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayIndex, true);
+         calendar.addTimeBlock('Pick up Discount Meat', '1830', '1900', dayIndex, true);
+         calendar.addTimeBlock('Pick up Discount Meat', '0930', '1000', dayIndex, true);
+         //Get the state of the calendar on a specific day
          const testDay = calendar.state.days[dayIndex]; 
          //expect(testDay.props.timeBlocks.length).toEqual(13);
         // Check each block in testDay to make sure consecutive start and end times are contiguous
         for (let ndx = 0; ndx < testDay.props.timeBlocks.length - 2; ndx ++) {
             const previousBlock = testDay.props.timeBlocks[ndx];
             const currentBlock = testDay.props.timeBlocks[ndx + 1];
+            console.log(currentBlock.props.title + ' runs from ' +  currentBlock.props.startTime + ' to ' + currentBlock.props.endTime);
             expect(parseInt(previousBlock.props.endTime)).toEqual(parseInt(currentBlock.props.startTime));
         };
      });
@@ -130,17 +131,17 @@ describe('Calendar', () => {
      });
 
      //Test to determine whether an added time block generate availableTime as false (default)
-     it('should set the availableTime prop to false when a time block is added', () => {
+    it('should set the availableTime prop to false when a time block is added', () => {
          wrapper = mount(<Calendar />);
          let calendar = wrapper.instance();
          calendar.addTimeBlock('Meeting with Guy Fieri', '1600', '1700', 0);
          console.log('timeBlock[8]: ' + calendar.state.days[0].props.timeBlocks[8].props.availableTime);
          let newTimeBlock = calendar.state.days[0].props.timeBlocks[8];
          expect(newTimeBlock.props.availableTime).toEqual(false);
-     });
+    });
 
     //Test to determine whether an added time block generates availableTime as true when passed in
-        it('should set the availableTime prop to false when a time block is added', () => {
+    it('should set the availableTime prop to true when an occupied time block is added', () => {
         wrapper = mount(<Calendar />);
         let calendar = wrapper.instance();
         calendar.addTimeBlock('Meeting with Guy Fieri', '1600', '1700', 0, true);
@@ -149,5 +150,55 @@ describe('Calendar', () => {
         expect(newTimeBlock.props.availableTime).toEqual(true);
     });
 
+    // Test to ensure we do not modify the end times of the preceding TimeBlock if it is not marked as free time.
+    it('should not update the end time of a preceding occupied time block.', () => {
+        const dayIndex = 1;
+        const firstBlockIndex = 0;
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        // Replace the first time block of the day with an occupied block
+        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayIndex, false);
+        // This should add a time in the second slot of the day
+        calendar.addTimeBlock('Meeting with Andy Dwyer', '0830', '0900', dayIndex, false);
+        let previousTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex];
+        expect(previousTimeBlock.props.availableTime).toEqual(false);
+        expect(previousTimeBlock.props.endTime).toEqual('0900');
+        let newTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex + 1];
+        expect(newTimeBlock.props.availableTime).toEqual(false);
+        expect(newTimeBlock.props.startTime).toEqual('0830'); 
+    });
+
+    it('should not consume the next time block if the next time block is occupied.', () => {
+        const dayIndex = 1;
+        const firstBlockIndex = 0;
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        // Replace the first time block of the day with an occupied block
+        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayIndex, false);
+        // This should add a time in the second slot of the day
+        calendar.addTimeBlock('Meeting with Andy Dwyer', '0800', '0900', dayIndex, false);
+        let previousTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex];
+        expect(previousTimeBlock.props.title).toEqual('Meeting with Andy Dwyer');
+        let newTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex + 1];
+        expect(newTimeBlock.props.title).toEqual('Meeting with April Ludgate'); 
+    });
+
+    // Test to ensure we do not modify the start times of the following TimeBlock if it is not marked as free time.
+    it('should not update the start time of a following occupied time block.', () => {
+        const dayIndex = 1;
+        const firstBlockIndex = 0;
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        // This should add a time in the second slot of the day
+        calendar.addTimeBlock('Meeting with Andy Dwyer', '0830', '0900', dayIndex, false);
+        // Replace the first time block of the day with an occupied block
+        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayIndex, false);
+        let newTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex];
+        expect(newTimeBlock.props.availableTime).toEqual(false);
+        expect(newTimeBlock.props.endTime).toEqual('0900');
+        let nextTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex + 1];
+        expect(nextTimeBlock.props.availableTime).toEqual(false);
+        expect(nextTimeBlock.props.startTime).toEqual('0830'); 
+    });
 
 });

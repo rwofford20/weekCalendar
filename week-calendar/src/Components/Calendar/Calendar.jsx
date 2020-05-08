@@ -86,22 +86,20 @@ class Calendar extends Component{
           let arrayLength = timeBlocksToUpdate.length; 
           // TODO: Update key generation. If we ever remove a time block we run the risk of duplicate keys
           const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength} availableTime={availableTime}/>;
+          console.log('Adding a time block starting at ' + newTimeBlock.props.startTime + ' with availableTime set to ' + newTimeBlock.props.availableTime);
           this.setState( state => {
                // Update the TimeBlock array in state
                const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
                     if (dayIndex === ndx) {
                          // Add the new time block to the correct list
-                         //let longerList = timeBlockList.concat(newTimeBlock);
-                         // sort the list based on start times
-                         //longerList = longerList.sort((x, y) => (x.props.startTime > y.props.startTime) ? 1 : -1);
-                         //edit time blocks surrounding a new time block that has been inserted
                          let foo = 0;
                          //console.log('TimeBlockList 11: ' + timeBlockList[11].props.startTime);
+                         // Walk the list to get the index for insertion.
                          while(parseInt(timeBlockList[foo].props.startTime) < parseInt(newTimeBlock.props.startTime)) {
                               foo++;
                               //console.log('foo: ' + foo + 'TimeBlockList foo: ' + timeBlockList[foo].props.startTime) ;
                          }
-                         console.log('While loop terminated');
+                         //console.log('While loop terminated');
                          const left = timeBlockList.slice(0, foo);
                          const right = timeBlockList.slice(foo);
                          
@@ -110,11 +108,10 @@ class Calendar extends Component{
 
                          // time block has been inserted
                          // If the timeblock is not the first thing in the list, update its predecessor
-                         if (foo > 0){
+                         if (foo > 0) {
                               let previousTimeBlock = longerList[foo -1];
-                              //if the start times is less than the previous end time, set the previous end time to the current start time
-                              // TODO: Handle collisions if the predecessor is not a default block 
-                              if (parseInt(newTimeBlock.props.startTime) < parseInt(previousTimeBlock.props.endTime)){
+                              //if the start times is less than the previous end time, set the previous end time to the current start time 
+                              if (previousTimeBlock.props.availableTime && parseInt(newTimeBlock.props.startTime) < parseInt(previousTimeBlock.props.endTime)){
                                    //previousTimeBlock.props.endTime = newTimeBlock.props.startTime;
                                    longerList[foo-1] = cloneElement(previousTimeBlock, {endTime: newTimeBlock.props.startTime});
                                    //console.log('Cloned element with endTime: ' + longerList[foo-1].props.endTime);
@@ -127,17 +124,17 @@ class Calendar extends Component{
                               nextTimeBlock = longerList[foo + 1];
                               while (foo < (longerList.length - 1) && (parseInt(newTimeBlock.props.endTime) > parseInt(nextTimeBlock.props.startTime))) {                                   
                                    // If the new time block completely subsumes a successor, destroy the successor.
-                                   // TODO: Handle collisions if the successor is not a default block.
-                                   if (parseInt(newTimeBlock.props.endTime) >= parseInt(nextTimeBlock.props.endTime)) {
+                                   if (nextTimeBlock.props.availableTime && parseInt(newTimeBlock.props.endTime) >= parseInt(nextTimeBlock.props.endTime)) {
                                         longerList.splice(foo+1, 1);
-                                        console.log('Removed element consumed by the time block from ' + newTimeBlock.props.startTime + 'to' + newTimeBlock.props.endTime);
+                                        //console.log('Removed element consumed by the time block from ' + newTimeBlock.props.startTime + 'to' + newTimeBlock.props.endTime);
                                    } 
                                    // Otherwise, there is overlap, so adjust the default block's start time to avoid collision.
-                                   // TODO: Handle collisions if the successor is not a default block.
-                                   else {
+                                   else if (nextTimeBlock.props.availableTime){
                                         longerList[foo+1] = cloneElement(nextTimeBlock, {startTime: newTimeBlock.props.endTime});
-                                        console.log('Cloned element with startTime: ' + longerList[foo+1].props.startTime);
+                                        //console.log('Cloned element with startTime: ' + longerList[foo+1].props.startTime);
                                         foo++; 
+                                   } else {
+                                        foo++;
                                    }
                                    // TODO: refactor to improve robustness
                                    // There is no guarantee that foo + 1 is a valid index
@@ -168,7 +165,7 @@ class Calendar extends Component{
 
      render = () => {
           
-          //Originally returns a defualt calendar
+          //Originally returns a default calendar
           //Adds a meeting to a specified when the 'Add a meeting!' button is clicked
           return (
                     <div className = 'calendar-container'>
