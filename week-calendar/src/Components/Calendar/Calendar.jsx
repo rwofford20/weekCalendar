@@ -71,6 +71,7 @@ class Calendar extends Component{
           const timeArray = this.generateTimes(startTime, endTime);
           let timeBlocks = [];
           for (let ndx = 0; ndx < timeArray.length - 1; ndx++) {
+               //Do not reset the key anywhere else in the code!
               timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx} availableTime={true}/>);
           }
           return timeBlocks;
@@ -85,7 +86,8 @@ class Calendar extends Component{
           let timeBlocksToUpdate = everything[dayIndex];
           let arrayLength = timeBlocksToUpdate.length; 
           // TODO: Update key generation. If we ever remove a time block we run the risk of duplicate keys
-          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength} availableTime={availableTime}/>;
+          let key = title+startTime+endTime;
+          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={key} availableTime={availableTime}/>;
           console.log('Adding a time block starting at ' + newTimeBlock.props.startTime + ' with availableTime set to ' + newTimeBlock.props.availableTime);
           this.setState( state => {
                // Update the TimeBlock array in state
