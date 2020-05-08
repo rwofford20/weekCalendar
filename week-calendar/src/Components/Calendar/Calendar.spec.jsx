@@ -97,7 +97,7 @@ describe('Calendar', () => {
         }
      });
 
-     //This test is going poorly right now, throwing an error about props being  undefoned in the code
+     //This test is going poorly right now, throwing an error about props being undefined in the code
      //Aside from the test, the portion of the code this is testing seems to be working correctly
      //Check that the end time of the previous TimeBlock equals the start time of the next TimeBlock
      it('should match the end time of the previous time block to the start time of the new time block', () => {
@@ -118,5 +118,36 @@ describe('Calendar', () => {
             expect(parseInt(previousBlock.props.endTime)).toEqual(parseInt(currentBlock.props.startTime));
         };
      });
+
+     //Test to determine whether default time blocks generate availableTime as true
+     it('should set the availableTime prop to true when a default time block is rendered', () => {
+        wrapper = mount(<Calendar />);
+        let days = wrapper.children('.calendar-container').first().children('Day');
+        let timeBlocks = days.find('div.day-container').children('TimeBlock');
+        for (let ndx = 0; ndx < timeBlocks.length; ndx++){
+            expect(timeBlocks.at(ndx).props().availableTime).toEqual(true);
+        }
+     });
+
+     //Test to determine whether an added time block generate availableTime as false (default)
+     it('should set the availableTime prop to false when a time block is added', () => {
+         wrapper = mount(<Calendar />);
+         let calendar = wrapper.instance();
+         calendar.addTimeBlock('Meeting with Guy Fieri', '1600', '1700', 0);
+         console.log('timeBlock[8]: ' + calendar.state.days[0].props.timeBlocks[8].props.availableTime);
+         let newTimeBlock = calendar.state.days[0].props.timeBlocks[8];
+         expect(newTimeBlock.props.availableTime).toEqual(false);
+     });
+
+    //Test to determine whether an added time block generates availableTime as true when passed in
+        it('should set the availableTime prop to false when a time block is added', () => {
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        calendar.addTimeBlock('Meeting with Guy Fieri', '1600', '1700', 0, true);
+        console.log('timeBlock[8]: ' + calendar.state.days[0].props.timeBlocks[8].props.availableTime);
+        let newTimeBlock = calendar.state.days[0].props.timeBlocks[8];
+        expect(newTimeBlock.props.availableTime).toEqual(true);
+    });
+
 
 });

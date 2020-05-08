@@ -71,7 +71,7 @@ class Calendar extends Component{
           const timeArray = this.generateTimes(startTime, endTime);
           let timeBlocks = [];
           for (let ndx = 0; ndx < timeArray.length - 1; ndx++) {
-              timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx}/>);
+              timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx} availableTime={true}/>);
           }
           return timeBlocks;
       };
@@ -80,12 +80,12 @@ class Calendar extends Component{
       //Currently used in the return statement of Calendar.jsx
       //Input is the title, start time, end time, and day for a time block that is to be added to a day
       //Output is that time block added to the pre-existing array of time blocks for that day
-      addTimeBlock = (title, startTime, endTime, dayIndex) => {
+      addTimeBlock = (title, startTime, endTime, dayIndex, availableTime=false) => {
           let everything=this.state.timeBlocksForDays;
           let timeBlocksToUpdate = everything[dayIndex];
           let arrayLength = timeBlocksToUpdate.length; 
           // TODO: Update key generation. If we ever remove a time block we run the risk of duplicate keys
-          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength}/>;
+          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={arrayLength} availableTime={availableTime}/>;
           this.setState( state => {
                // Update the TimeBlock array in state
                const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
@@ -171,16 +171,14 @@ class Calendar extends Component{
           //Originally returns a defualt calendar
           //Adds a meeting to a specified when the 'Add a meeting!' button is clicked
           return (
-               <div>
                     <div className = 'calendar-container'>
                          {this.state.days}
                     </div>
-                    <div onClick={() => this.addTimeBlock('Ron Swanson', '1230', '1430', 1)} >
+                    /* <div onClick={() => this.addTimeBlock('Ron Swanson', '1230', '1430', 1)} >
                          <p>
                               Add a meeting!
                          </p>
-                    </div>  
-               </div>
+                    </div>   */
           );
      };
 }
