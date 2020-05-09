@@ -201,4 +201,17 @@ describe('Calendar', () => {
         expect(nextTimeBlock.props.startTime).toEqual('0830'); 
     });
 
+    //Test to check if a time block has been deleted
+    it('should remove a time block from the calendar', () => {
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        const timeBlockID = 5;
+        const dayID = 'tuesday';
+        console.log('Deleting timeblock: ' + timeBlockID + 'on' + dayID);
+        calendar.deleteTimeBlock(timeBlockID, dayID);
+        console.log('Timeblock Deleted');
+        let deletedTimeBlock = calendar.state.days[dayID].props.timeBlock[timeBlockID];
+        const day = wrapper.findWhere((d) => d.props().id === dayID);
+        expect(day.findWhere((b) => b.props().id === timeBlockID)).toEqual(0);
+    });
 });

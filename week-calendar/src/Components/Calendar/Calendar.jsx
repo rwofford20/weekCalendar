@@ -36,7 +36,7 @@ class Calendar extends Component{
           let days = [];
           for (let ndx = 0; ndx < numDays; ndx ++) {
                let timeBlocks = this.generateTimeBlocks(800, 2000);
-               days.push(<Day timeBlocks={timeBlocks} key={this.weekdays[ndx % 5]} />);
+               days.push(<Day timeBlocks={timeBlocks} key={this.weekdays[ndx % 5]} id={this.weekdays[ndx % 5]} />);
           }
           return days;
      };
@@ -72,7 +72,7 @@ class Calendar extends Component{
           let timeBlocks = [];
           for (let ndx = 0; ndx < timeArray.length - 1; ndx++) {
                //Do not reset the key anywhere else in the code!
-              timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx} availableTime={true}/>);
+              timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx} id={ndx} availableTime={true}/>);
           }
           return timeBlocks;
       };
@@ -85,9 +85,9 @@ class Calendar extends Component{
           let everything=this.state.timeBlocksForDays;
           let timeBlocksToUpdate = everything[dayIndex];
           let arrayLength = timeBlocksToUpdate.length; 
-          // TODO: Update key generation. If we ever remove a time block we run the risk of duplicate keys
+          // TODO: Update key generation for when data is passed in from the database.
           let key = title+startTime+endTime;
-          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={key} availableTime={availableTime}/>;
+          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={key} id={key} availableTime={availableTime}/>;
           console.log('Adding a time block starting at ' + newTimeBlock.props.startTime + ' with availableTime set to ' + newTimeBlock.props.availableTime);
           this.setState( state => {
                // Update the TimeBlock array in state
@@ -164,6 +164,43 @@ class Calendar extends Component{
                return {timeBlocksForDays, days: days};
           });
       };
+
+     deleteTimeBlock = (timeBlockID, dayID) => {
+          console.log('Number of days: ' + this.state.timeBlocksForDays.length);
+          let dayIndex = 0;
+          while (this.state.days[dayIndex].props.id != dayID) {
+               console.log('ID: ' + this.state.days[dayIndex].props.id + ' Day ID: ' + dayID);
+               dayIndex++;
+               //TODO: Handle situation where dayIndex >= 5
+          };
+          console.log('ID: ' + this.state.days[dayIndex].props.id + ' Day ID: ' + dayID);
+          console.log('Day index: ' + dayIndex);
+          //const day = this.state.days[dayIndex];
+          this.setState((state) => { 
+               const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
+                    console.log('dayIndex: ' + dayIndex + ' NDX: ' + ndx);
+                    if (dayIndex === ndx){
+                         let blockIndex = 0;
+                         console.log('TimeBlock list: ' + timeBlockList[blockIndex].props.id + 'NDX: ' + ndx);
+                         while (timeBlockList[blockIndex].props.id != timeBlockID){
+                              console.log('TimeBlockListID: ' + timeBlockList[blockIndex].props.id + ' timeBlockID: ' + timeBlockID);
+                              blockIndex++;
+                              console.log('block index' + blockIndex);
+                              //TODO: Verify blockIndex is within bounds
+                         }
+                         // let longerlist = timeBlockList;
+                         // longerlist.splice(blockIndex, 1);
+                         // return longerlist;
+                         console.log('about to return array with deleted time block');
+                         return timeBlockList.splice(blockIndex, 1);
+                    }
+                    else {
+                         return timeBlockList; 
+                    }
+               });
+               return {timeBlocksForDays, days};
+          });
+     };
 
      render = () => {
           
