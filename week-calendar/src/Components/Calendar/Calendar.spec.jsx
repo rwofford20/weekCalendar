@@ -210,8 +210,9 @@ describe('Calendar', () => {
         console.log('Deleting timeblock: ' + timeBlockID + 'on' + dayID);
         calendar.deleteTimeBlock(timeBlockID, dayID);
         console.log('Timeblock Deleted');
-        let deletedTimeBlock = calendar.state.days[dayID].props.timeBlock[timeBlockID];
+        //let deletedTimeBlock = calendar.state.days[dayID].props.timeBlock[timeBlockID];
+        wrapper.update();
         const day = wrapper.findWhere((d) => d.props().id === dayID);
-        expect(day.findWhere((b) => b.props().id === timeBlockID)).toEqual(0);
+        expect(day.findWhere((b) => b.props().id === timeBlockID).length).toEqual(0);
     });
 });

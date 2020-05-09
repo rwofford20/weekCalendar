@@ -20,7 +20,6 @@ class Calendar extends Component{
                timeBlocksForDays: defaultTimeBlocksForDays,
                days: this.generateDays(5)
           };
-
      }
 
      weekdays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
@@ -51,17 +50,17 @@ class Calendar extends Component{
               timeString = '0' + timeString;
           }
           return timeString;
-      };
+     };
       
       //Function to generate start and end times for a time block
       //Used in generateTimeBlocks function
       //Input is an integer start time and end time
       //Output is an array of string start and end times
-      generateTimes = (startTime, endTime) => {
+     generateTimes = (startTime, endTime) => {
           let timeArray = Array((endTime / 100) - (startTime / 100) + 1).fill().map((_, ndx) => startTime + 100 * ndx );
           timeArray = timeArray.map((intTime, ndx) => this.convertTimeToString(intTime));
           return timeArray;
-      };
+     };
       
       //Function to generate default time blocks for a Day component
       //Used in the Calendar constructor and the generateDays function
@@ -75,7 +74,7 @@ class Calendar extends Component{
               timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx} id={ndx} availableTime={true}/>);
           }
           return timeBlocks;
-      };
+     };
 
       //Function that adds a specific time block to a Day component
       //Currently used in the return statement of Calendar.jsx
@@ -177,15 +176,15 @@ class Calendar extends Component{
           console.log('Day index: ' + dayIndex);
           //const day = this.state.days[dayIndex];
           this.setState((state) => { 
+               console.log("Setting state");
                const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
                     console.log('dayIndex: ' + dayIndex + ' NDX: ' + ndx);
                     if (dayIndex === ndx){
                          let blockIndex = 0;
-                         console.log('TimeBlock list: ' + timeBlockList[blockIndex].props.id + 'NDX: ' + ndx);
-                         while (timeBlockList[blockIndex].props.id != timeBlockID){
-                              console.log('TimeBlockListID: ' + timeBlockList[blockIndex].props.id + ' timeBlockID: ' + timeBlockID);
+                         console.log('TimeBlock ID: ' + timeBlockList[blockIndex].props.id + ' NDX: ' + ndx);
+                         while (timeBlockList[blockIndex].props.id !== timeBlockID){
+                              console.log('TimeBlockList : ' + timeBlockList[blockIndex].props.id + ' parameter timeBlockID: ' + timeBlockID + ' block index: ' + blockIndex);
                               blockIndex++;
-                              console.log('block index' + blockIndex);
                               //TODO: Verify blockIndex is within bounds
                          }
                          // let longerlist = timeBlockList;
@@ -196,6 +195,16 @@ class Calendar extends Component{
                     }
                     else {
                          return timeBlockList; 
+                    }
+               });
+               // Using the updated TimeBlock array, update the day array in state.
+               const days = state.days.map( (day, ndx) => {
+                    if (dayIndex === ndx) {
+                         const newDay = <Day timeBlocks={timeBlocksForDays[dayIndex]} key={day.key} id={day.id}/>
+                         return newDay;
+                    }
+                    else {
+                         return day;
                     }
                });
                return {timeBlocksForDays, days};
