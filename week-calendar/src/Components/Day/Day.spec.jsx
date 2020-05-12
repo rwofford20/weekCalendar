@@ -62,9 +62,5 @@ describe('Day', () => {
         for (let ndx =0; ndx < timeBlockList.length; ndx++) {
             expect(timeBlockList.at(ndx).key()).toEqual(ndx.toString());
         };
-        //timeBlockList.forEach((node) => {
-            //expect(node.key()).toEqual(node.prop('key'));
-            //expect(node.key()).toEqual('0800');
-        //});
     });
 });

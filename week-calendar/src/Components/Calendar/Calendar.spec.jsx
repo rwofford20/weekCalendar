@@ -215,4 +215,77 @@ describe('Calendar', () => {
         const day = wrapper.findWhere((d) => d.props().id === dayID);
         expect(day.findWhere((b) => b.props().id === timeBlockID).length).toEqual(0);
     });
+
+    it('should fill the gap before the first timeBlock when editing it', () => {
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        const timeBlockID = 'Avoiding Michael08000930';
+        const dayId = 'wednesday';
+        const dayIndex = 2;
+        // Add a new time block to Wednesday
+        calendar.addTimeBlock('Avoiding Michael', '0800', '0930', dayIndex, false);
+        wrapper.update();
+        let wed = wrapper.find('Day').at(dayIndex);
+        //console.log('Length of wednesday: ' + wed.length);
+        console.log('ID for wednesday: ' + wed.props().id);
+        let wedTimeBlocks = wed.find('TimeBlock');
+        // Check that the add went as expected: the new meeting replaces all but four of the default blocks
+        //expect(wedTimeBlocks).to.have.length(12);
+        expect(wedTimeBlocks.length).toEqual(12);
+        let timeBlock = wedTimeBlocks.findWhere((tb) => tb.props().id === timeBlockID);
+        // And we have successfully identified the new time block
+        expect(timeBlock.props().startTime).toEqual('0800');
+        expect(timeBlock.props().endTime).toEqual('0930');
+        // Change the time block's data
+        calendar.updateTimeBlock(timeBlockID, dayId, 'Michael is going home early!', '0830', '0930', false);
+        wrapper.update();
+
+        let wed2 = wrapper.find('Day').at(dayIndex);
+        let wedTimeBlocks2 = wed2.find('TimeBlock');
+        console.log('Wed2 has ' + wedTimeBlocks2.length + ' time blocks');
+        // wedTimeBlocks.forEach(block => console.log('Wednesday has a block with id = ' + block.props().id));
+        let timeBlock2 = wedTimeBlocks.findWhere((tb) => tb.props().id === timeBlockID);
+        // Check that the props are updated on the edited time block
+        expect(timeBlock2.props().title).toEqual('Michael is going home early!');
+        expect(timeBlock2.props().startTime).toEqual('0830');
+        expect(timeBlock2.props().endTime).toEqual('0930');
+
+        // Expect the first time block to fill the 0800-0830 gap
+        let firstTimeBlock = wedTimeBlocks2[0];
+        expect(firstTimeBlock.props().title).toEqual('');
+        expect(firstTimeBlock.props().startTime).toEqual('0800');
+        expect(firstTimeBlock.props().endTime).toEqual('0830');
+    });
+
+
+    it('should edit an existing time block title', () => {
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        const timeBlockID = 'Avoiding Michael09001700';
+        const dayId = 'wednesday';
+        const dayIndex = 2;
+        // Add a new time block to Wednesday
+        calendar.addTimeBlock('Avoiding Michael', '0900', '1700', dayIndex, false);
+        wrapper.update();
+        let wed = wrapper.find('Day').at(dayIndex);
+        //console.log('Number of days: ' + wrapper.find('Day').length);
+        console.log('Length of wednesday: ' + wed.length);
+        console.log('ID for wednesday: ' + wed.props().id);
+        let wedTimeBlocks = wed.find('TimeBlock');
+        // Check that the add went as expected: the new meeting replaces all but four of the default blocks
+        expect(wedTimeBlocks).to.have.length(5);
+        let timeBlock = wedTimeBlocks.findWhere((tb) => tb.props().id === timeBlockID);
+        // And we have successfully identified the new time block
+        expect(timeBlock.props().startTime).toEqual('0900');
+        expect(timeBlock.props().endTime).toEqual('1700');
+        // Change the time block's data
+        calendar.updateTimeBlock(timeBlockID, dayId, 'Michael is going home early!', '0900', '1430', false);
+        // Check to see that the newly freed space is populated by free time blocks.
+        wrapper.update();
+        expect(wedTimeBlocks).to.have.length(8);
+        expect(timeBlock.props().title).toEqual('Michael is going home early!');
+        expect(timeBlock.props().startTime).toEqual('0900');
+        expect(timeBlock.props().endTime).toEqual('1430');
+    });
+
 });
