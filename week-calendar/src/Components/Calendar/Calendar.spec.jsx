@@ -267,13 +267,34 @@ describe('Calendar', () => {
         // Add a new time block to Wednesday
         calendar.addTimeBlock('Avoiding Michael', '0900', '1700', dayIndex, false);
         wrapper.update();
+        // Change the time block's data
+        calendar.updateTimeBlock(timeBlockID, dayId, 'Michael is going home early!', '0900', '1700', false);
+        // Check to see that the newly freed space is populated by free time blocks.
+        wrapper.update();
+        let wed = wrapper.find('Day').at(dayIndex);
+        let wedTimeBlocks = wed.find('TimeBlock');
+        console.log('Length of wedTimeBlocks: ' + wedTimeBlocks.length);
+        let timeBlock = wedTimeBlocks.findWhere((tb) => tb.props().id === timeBlockID);
+        // And we have successfully identified the new time block
+        expect(timeBlock.props().title).toEqual('Michael is going home early!');
+    });
+
+    it('should edit the start and/or end time of a timeBlock that is not the first or last', () => {
+        wrapper = mount(<Calendar />);
+        let calendar = wrapper.instance();
+        const timeBlockID = 'Avoiding Michael09001700';
+        const dayId = 'wednesday';
+        const dayIndex = 2;
+        // Add a new time block to Wednesday
+        calendar.addTimeBlock('Avoiding Michael', '0900', '1700', dayIndex, false);
+        wrapper.update();
         let wed = wrapper.find('Day').at(dayIndex);
         //console.log('Number of days: ' + wrapper.find('Day').length);
         console.log('Length of wednesday: ' + wed.length);
         console.log('ID for wednesday: ' + wed.props().id);
         let wedTimeBlocks = wed.find('TimeBlock');
         // Check that the add went as expected: the new meeting replaces all but four of the default blocks
-        expect(wedTimeBlocks).to.have.length(5);
+        expect(wedTimeBlocks.length).toEqual(5);
         let timeBlock = wedTimeBlocks.findWhere((tb) => tb.props().id === timeBlockID);
         // And we have successfully identified the new time block
         expect(timeBlock.props().startTime).toEqual('0900');
@@ -282,7 +303,7 @@ describe('Calendar', () => {
         calendar.updateTimeBlock(timeBlockID, dayId, 'Michael is going home early!', '0900', '1430', false);
         // Check to see that the newly freed space is populated by free time blocks.
         wrapper.update();
-        expect(wedTimeBlocks).to.have.length(8);
+        expect(wedTimeBlocks.length).toEqual(8);
         expect(timeBlock.props().title).toEqual('Michael is going home early!');
         expect(timeBlock.props().startTime).toEqual('0900');
         expect(timeBlock.props().endTime).toEqual('1430');

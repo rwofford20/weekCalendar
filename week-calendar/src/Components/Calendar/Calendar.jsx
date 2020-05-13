@@ -215,7 +215,7 @@ class Calendar extends Component{
      // Update an existing time block
      // If a parameter is ever an
      // TODO: Need to consider what happens when multiple available time blocks are exposed by shortening a long meeting
-     updateTimeBlock = (timeBlockID, dayID, newTitle='', newStartTime='', newEndTime='', availableTime = false) => {
+     badUpdateTimeBlock = (timeBlockID, dayID, newTitle='', newStartTime='', newEndTime='', availableTime = false) => {
           console.log('Update called with newStartTime = ' + newStartTime);
           //let dayIndex = 1;
           let dayIndex = 0;
@@ -228,20 +228,20 @@ class Calendar extends Component{
                console.log('Incremented dayIndex to ' + dayIndex);
                //TODO: Handle situation where dayIndex >= 5
           };
-          console.log('Found day index of ' + dayIndex + ' for a dayID parameter of ' + dayID);
+          //console.log('Found day index of ' + dayIndex + ' for a dayID parameter of ' + dayID);
           this.setState((state) => { 
-               console.log("Setting state via updateTimeBlock");
+               //console.log("Setting state via updateTimeBlock");
                const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
-                    console.log('In updateTimeBlock: dayIndex: ' + dayIndex + ' NDX: ' + ndx);
+                    //console.log('In updateTimeBlock: dayIndex: ' + dayIndex + ' NDX: ' + ndx);
                     if (dayIndex === ndx){
-                         console.log('updateTimeBlock found the right day: ' + dayIndex + ' = ' + ndx);
+                         //console.log('updateTimeBlock found the right day: ' + dayIndex + ' = ' + ndx);
                          let blockIndex = 0;
                          while (timeBlockList[blockIndex].props.id !== timeBlockID){
                               console.log('In updateTimeBlock: TimeBlockList : ' + timeBlockList[blockIndex].props.id + ' parameter timeBlockID: ' + timeBlockID + ' block index: ' + blockIndex);
                               blockIndex++;
                               //TODO: Verify blockIndex is within bounds
                          }
-                         console.log('update found the right timeblock : ' + timeBlockList[blockIndex].props.id + ' parameter timeBlockID: ' + timeBlockID + ' block index: ' + blockIndex);
+                         //console.log('update found the right timeblock : ' + timeBlockList[blockIndex].props.id + ' parameter timeBlockID: ' + timeBlockID + ' block index: ' + blockIndex);
                          // Update the time block values
                          const oldTimeBlock = timeBlockList[blockIndex];
                          const oldBlockTitle = oldTimeBlock.props.title;
@@ -307,7 +307,14 @@ class Calendar extends Component{
                          // Otherwise if the start time got earlier, remove or reduce free blocks to make room
                          } else if (startDelta < 0) {
 
-                         } 
+                         }
+                         
+                         //if (endDelta > 0)
+                         //if (endDelta < 0)
+
+                         // if (startDelta === 0 && endDelta === 0){
+
+                         // }
 
 
                          // Subtract end times to see if we need blocks after.
@@ -346,6 +353,44 @@ class Calendar extends Component{
           });
      };
 
+     updateTimeBlock = (timeBlockID, sourceDayID, newDayID='', newTitle='', newStartTime='', newEndTime='', availableTime = false) => {
+          //Find the right day
+          let dayIndex = 0;
+          while (this.state.days[dayIndex].props.id !== sourceDayID) {
+               dayIndex++;
+               //TODO: Handle situation where dayIndex >= 5
+          };
+          let blocksForSourceDay = this.state.timeBlocksForDays[dayIndex];
+
+          //Find the right timeBlock
+          let blockIndex = 0;
+          while (blocksForSourceDay[blockIndex].props.id !== timeBlockID){
+               blockIndex++;
+          }
+          let sourceTimeBlock = this.state.blocksForSourceDay[blockIndex];
+
+          //Store the information of the source time block
+          const sourceTimeBlockID = sourceTimeBlock.props.timeBlockID;
+          const sourceTitle = sourceTimeBlock.props.title;
+          const sourceStartTime = sourceTimeBlock.props.startTime;
+          const sourceEndTime = sourceTimeBlock.props.endTime; 
+          const sourceAvailableTime = sourceTimeBlock.props.availableTime; 
+
+          //Delete the source time block
+          this.deleteTimeBlock(timeBlockID, sourceDayID);
+
+          // Update the time block values
+          const destinationTitle = newTitle.length > 0 ? newTitle : sourceTitle;
+          const destinationStartTime = newStartTime.length > 0 ? newStartTime : sourceStartTime;
+          const destinationEndTime = newEndTime.length > 0 ? newEndTime : sourceEndTime;
+          const destinationDayID = newDayID.length > 0? newDayID: sourceDayID;
+
+          //Add a new time block with updated information
+          this.addTimeBlock(destinationTitle, destinationStartTime, destinationEndTime, destinationDayID, availableTime);
+
+     };
+     
+
      render = () => {
           
           //Originally returns a default calendar
@@ -355,12 +400,12 @@ class Calendar extends Component{
                     <div className = 'calendar-container'>
                          {this.state.days}
                     </div>
-                    <div onClick={() => this.addTimeBlock('Ron Swanson', '0800', '0930', 1)} >
+                    <div onClick={() => this.addTimeBlock('Ron Swanson', '0900', '1700', 1)} >
                          <p>
                               Add a meeting!
                          </p>
                     </div>
-                    <div onClick={() => this.updateTimeBlock('Ron Swanson08000930', 'tuesday', 'Updated Ron', '0830', '0930', false)}>
+                    <div onClick={() => this.updateTimeBlock('Ron Swanson09001700', 'tuesday', 'Updated Ron', '0830', '0930', false)}>
                          Update Ron's meeting
                     </div>
                </div>
