@@ -81,14 +81,19 @@ class Calendar extends Component{
       //Currently used in the return statement of Calendar.jsx
       //Input is the title, start time, end time, and day for a time block that is to be added to a day
       //Output is that time block added to the pre-existing array of time blocks for that day
-      addTimeBlock = (title, startTime, endTime, dayIndex, availableTime=false) => {
+      addTimeBlock = (title, startTime, endTime, dayID, availableTime=false) => {
           //let everything=this.state.timeBlocksForDays;
           //let timeBlocksToUpdate = everything[dayIndex];
           //let arrayLength = timeBlocksToUpdate.length; 
           // TODO: Update key generation for when data is passed in from the database.
           let key = title+startTime+endTime;
           const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={key} id={key} availableTime={availableTime}/>;
-          console.log('Adding a time block starting at ' + newTimeBlock.props.startTime + ' with availableTime set to ' + newTimeBlock.props.availableTime);
+          console.log('Adding a time block starting at ' + newTimeBlock.props.startTime + ' and ending at ' + newTimeBlock.props.endTime + 'on the day' + dayID + ' with availableTime set to ' + newTimeBlock.props.availableTime);
+          let dayIndex = 0;
+          while (this.state.days[dayIndex].props.id !== dayID) {
+               dayIndex++;
+               //TODO: Handle situation where dayIndex >= 5
+          };
           this.setState( state => {
                // Update the TimeBlock array in state
                const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
@@ -167,37 +172,145 @@ class Calendar extends Component{
 
      // TODO: Need to consider what happens when multiple available time blocks are exposed by deleting a long meeting 
      deleteTimeBlock = (timeBlockID, dayID) => {
-          console.log('Number of days: ' + this.state.timeBlocksForDays.length);
+          console.log('Deleting Time Block');
           let dayIndex = 0;
           while (this.state.days[dayIndex].props.id !== dayID) {
-               //console.log('ID: ' + this.state.days[dayIndex].props.id + ' Day ID: ' + dayID);
                dayIndex++;
                //TODO: Handle situation where dayIndex >= 5
           };
-          //console.log('ID: ' + this.state.days[dayIndex].props.id + ' Day ID: ' + dayID);
-          //console.log('Day index: ' + dayIndex);
+          let blocksForSourceDay = this.state.timeBlocksForDays[dayIndex];
+
+          //Find the right timeBlock
+          let blockIndex = 0;
+          while (blocksForSourceDay[blockIndex].props.id !== timeBlockID) {
+               blockIndex++;
+          };
+          // console.log('This.state: ' + this.state);
+          // console.log('Source day block index: ' + this.state.blocksForSourceDay);
+          let sourceTimeBlock = blocksForSourceDay[blockIndex];
+
+          let previousBlockEndTime;
+          let nextBlockStartTime;
+
+          let previousTimeBlock; 
+          let nextTimeBlock;
+
+          //Find the previous and next time block's information
+          //If we are working with the first time block set the previous block's end time to 0800
+          //If we are not working with the first time block, get the previous block's end time
+          if (blockIndex === 0) {
+               previousBlockEndTime = this.defaultDayStartTime;
+               previousTimeBlock = null;
+          }
+          else {
+               previousBlockEndTime = parseInt(blocksForSourceDay[blockIndex-1].props.endTime);
+               previousTimeBlock = blocksForSourceDay[blockIndex-1];
+          }
+
+          //If we are working with the last time block set the previous block's end time to 2000
+          //If we are not working with the first time block, get the next block's start time 
+          if (blockIndex === blocksForSourceDay.length-1) {
+               nextBlockStartTime = this.defaultDayEndTime;
+               nextTimeBlock = null;
+          }
+          else {
+               nextBlockStartTime = parseInt(blocksForSourceDay[blockIndex+1].props.startTime);
+               nextTimeBlock = blocksForSourceDay[blockIndex+1];
+          }
+
+          let fillBlockStartTime = previousBlockEndTime;
+          let fillBlockEndTime = nextBlockStartTime;
+          //console.log('fillBlockstartTime: ' + fillBlockStartTime + 'fillBlockEndTime: ' + fillBlockEndTime);
+          
+          let fillBlockStartTimeMinutes = (fillBlockStartTime % 100);
+          let fillBlockEndTimeMinutes = (fillBlockEndTime % 100);
+          //console.log('fillBlockStartTimeMinutes: ' + fillBlockStartTimeMinutes + 'fillBlockEndTimeMinutes: ' + fillBlockEndTimeMinutes);
+
+          let firstFillEndTime = Math.ceil(fillBlockStartTime/100)*100;
+          let lastFillStartTime = Math.floor(fillBlockEndTime/100)*100;
+          let fillBlockHours = lastFillStartTime - firstFillEndTime;
+          // console.log('firstFillEndTime: ' + firstFillEndTime);
+          // console.log('lastFillStartTime' + lastFillStartTime);
+          // console.log('fillBlockHours' + fillBlockHours);
+
+          let lastFillEndTime = firstFillEndTime + fillBlockHours + fillBlockEndTimeMinutes;
+          //console.log('lastFillEndTime: ' + lastFillEndTime);
+
+          //Create the blocks to fill the gap
+          let timeBlocksToAdd = [];
+
+          //Merge partial time blocks together if necessary
+          let endFirstHalf = blockIndex;
+          let startSecondHalf = blockIndex;
+          if(previousTimeBlock != null && previousTimeBlock.props.availableTime && fillBlockStartTimeMinutes > 0) {
+               console.log('merging first time block');
+               endFirstHalf = blockIndex-1;
+               timeBlocksToAdd.push(cloneElement(previousTimeBlock, {endTime: this.convertTimeToString(firstFillEndTime)}));
+          }
+          else if (fillBlockStartTimeMinutes > 0) {
+               let fillStartTime = this.convertTimeToString(fillBlockStartTime);
+               let fillEndTime = this.convertTimeToString(firstFillEndTime);
+               //console.log('fillStartTime: ' + fillStartTime + 'fillEndTime: ' + fillEndTime);
+               timeBlocksToAdd.push(<TimeBlock 
+                    title = {this.defaultTimeBlockTitle} 
+                    startTime = {fillStartTime}
+                    endTime = {fillEndTime}
+                    availableTime = {true}
+                    id = {fillStartTime + fillEndTime}
+                    key = {fillStartTime + fillEndTime}
+                    />)
+          }
+
+          for (let ndx =0; ndx < fillBlockHours/100; ndx++) {
+               let fillStartTime = this.convertTimeToString(firstFillEndTime + ndx*100);
+               let fillEndTime = this.convertTimeToString(firstFillEndTime + (ndx+1)*100);
+               //console.log('fillStartTime: ' + fillStartTime + 'fillEndTime: ' + fillEndTime);
+               timeBlocksToAdd.push(<TimeBlock
+                    title = {this.defaultTimeBlockTitle} 
+                    startTime = {fillStartTime}
+                    endTime = {fillEndTime}
+                    availableTime = {true}
+                    id = {fillStartTime + fillEndTime}
+                    key = {fillStartTime + fillEndTime}                    
+                    />)
+          }
+
+          if(nextTimeBlock != null && nextTimeBlock.props.availableTime && fillBlockEndTimeMinutes > 0) {
+               console.log('merging last time block');
+               startSecondHalf = blockIndex+1;
+               timeBlocksToAdd.push(cloneElement(nextTimeBlock, {startTime: this.convertTimeToString(lastFillStartTime)}));
+          }
+          else if (fillBlockEndTimeMinutes > 0) {
+               let fillStartTime = this.convertTimeToString(lastFillStartTime);
+               let fillEndTime = this.convertTimeToString(lastFillEndTime); 
+               //console.log('fillStartTime: ' + fillStartTime + 'fillEndTime: ' + fillEndTime);
+               timeBlocksToAdd.push(<TimeBlock
+                    title = {this.defaultTimeBlockTitle}
+                    startTime = {fillStartTime}
+                    endTime = {fillEndTime}
+                    availableTime = {true}
+                    id = {fillStartTime + fillEndTime}
+                    key = {fillStartTime + fillEndTime}                   
+                    />)
+          }
+
+          //Build a list with the new time blocks added in
+          let previousBlocks = blocksForSourceDay.slice(0, endFirstHalf);
+          let nextBlocks = blocksForSourceDay.slice(startSecondHalf+1);
+          let updatedList = previousBlocks.concat(timeBlocksToAdd, nextBlocks);
+
+
+          //Fill the spaces from which the time block is being deleted
           this.setState((state) => { 
-               console.log("Setting state");
                const timeBlocksForDays = state.timeBlocksForDays.map((timeBlockList, ndx) => {
-                    console.log('dayIndex: ' + dayIndex + ' NDX: ' + ndx);
-                    if (dayIndex === ndx){
-                         let blockIndex = 0;
-                         console.log('TimeBlock ID: ' + timeBlockList[blockIndex].props.id + ' NDX: ' + ndx);
-                         while (timeBlockList[blockIndex].props.id !== timeBlockID){
-                              console.log('TimeBlockList : ' + timeBlockList[blockIndex].props.id + ' parameter timeBlockID: ' + timeBlockID + ' block index: ' + blockIndex);
-                              blockIndex++;
-                              //TODO: Verify blockIndex is within bounds
-                         }
-                         // let longerlist = timeBlockList;
-                         // longerlist.splice(blockIndex, 1);
-                         // return longerlist;
-                         console.log('about to return array with deleted time block');
-                         return timeBlockList.splice(blockIndex, 1);
+                    if (dayIndex === ndx) {
+                         return updatedList;
                     }
                     else {
-                         return timeBlockList; 
+                         return timeBlockList;
                     }
                });
+
                // Using the updated TimeBlock array, update the day array in state.
                const days = state.days.map( (day, ndx) => {
                     if (dayIndex === ndx) {
@@ -364,10 +477,11 @@ class Calendar extends Component{
 
           //Find the right timeBlock
           let blockIndex = 0;
+          console.log('timeBlockID: ' + timeBlockID);
           while (blocksForSourceDay[blockIndex].props.id !== timeBlockID){
                blockIndex++;
           }
-          let sourceTimeBlock = this.state.blocksForSourceDay[blockIndex];
+          let sourceTimeBlock = blocksForSourceDay[blockIndex];
 
           //Store the information of the source time block
           const sourceTimeBlockID = sourceTimeBlock.props.timeBlockID;
@@ -386,7 +500,10 @@ class Calendar extends Component{
           const destinationDayID = newDayID.length > 0? newDayID: sourceDayID;
 
           //Add a new time block with updated information
+          console.log('destinationTitle: ' + destinationTitle + 'destinationStartTime: ' + destinationStartTime + 'destinationEndTime: ' + destinationEndTime
+               + 'destinationDayID: ' + destinationDayID + 'availableTime: ' + availableTime);
           this.addTimeBlock(destinationTitle, destinationStartTime, destinationEndTime, destinationDayID, availableTime);
+          console.log('timeBlockId2: ' + timeBlockID);
 
      };
      
@@ -400,13 +517,16 @@ class Calendar extends Component{
                     <div className = 'calendar-container'>
                          {this.state.days}
                     </div>
-                    <div onClick={() => this.addTimeBlock('Ron Swanson', '0900', '1700', 1)} >
+                    <div onClick={() => this.addTimeBlock('Ron Swanson', '1130', '1230', 'tuesday')} >
                          <p>
                               Add a meeting!
                          </p>
                     </div>
-                    <div onClick={() => this.updateTimeBlock('Ron Swanson09001700', 'tuesday', 'Updated Ron', '0830', '0930', false)}>
+                    <div onClick={() => this.updateTimeBlock('Ron Swanson11301230', 'tuesday', 'tuesday', 'Updated Ron', '1300', '1430', false)}>
                          Update Ron's meeting
+                    </div>
+                    <div onClick={() => this.deleteTimeBlock('Ron Swanson11301230', 'tuesday')}>
+                         Delete Ron's meeting
                     </div>
                </div>
           );
