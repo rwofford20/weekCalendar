@@ -23,13 +23,14 @@ describe('Header', () => {
         expect(buttonContainer.children('Button')).toHaveLength(1);
     });
 
-    it('\'s add meeting button calls displayMeetingCreator', () => {
-        wrapper = mount(<Header />);
-        const spy = jest.spyOn(Header, 'displayMeetingCreator');
-        // Pass displayMeetingCreator to our button
-        const addMeetingButton = wrapper.find('div.header-add-meeting-button-container').children('Button').first();
-        // verify that it gets called
+    it('has an add meeting button which calls displayMeetingCreator', () => {
+        const spy = jest.spyOn(Header.prototype, 'displayMeetingCreator');
+        const component = mount(<Header />);
+        const addMeetingButton = component.find('Button').first();
+        
+        // Clickity clickity
         addMeetingButton.simulate('click');
+        // verify that it gets called
         expect(spy).toHaveBeenCalledTimes(1);
 
     });
