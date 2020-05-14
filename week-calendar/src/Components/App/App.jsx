@@ -1,11 +1,11 @@
 import React from 'react';
 import './App.css';
-import Calendar from '../Calendar/Calendar';
+import Schedule from '../Schedule/Schedule';
 
-//Renders the Calendar component
+//Renders the Schedule component
 const App = () => (
     <div className='app-container'>
-        <Calendar />
+        <Schedule />
     </div>
 );
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import App from './App';
-import Calendar from '../Calendar/Calendar';
+import Schedule from '../Schedule/Schedule';
 
 describe ('App', () => {
     let wrapper; 
@@ -18,8 +18,14 @@ describe ('App', () => {
         expect(wrapper).toMatchSnapshot()
     });
 
+    //Not necessary anymore, App should render a Schedule component
     //Test to determine if App.jsx renders a Calendar component
-    it('should render a Calendar component', () => {
-        expect(wrapper.containsMatchingElement(<Calendar />)).toEqual(true);
-    });
+    // it('should render a Calendar component', () => {
+    //     expect(wrapper.containsMatchingElement(<Calendar />)).toEqual(true);
+    // });
+
+    //Test to determine if App.jsx renders a Schedule component
+    it('should render a Schedule component', () => {
+        expect(wrapper.containsMatchingElement(<Schedule />)).toEqual(true);
+    })
 });
