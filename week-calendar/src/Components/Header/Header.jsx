@@ -1,16 +1,24 @@
 import React from 'react';
+import Button from '../Button/Button'
 import './Header.css';
 
-const Header = (props) => (
-    <div className='header-container'>
+
+function Header(props) {
+    const displayMeetingCreator = () => {
+        console.log('Called displayMeetingCreator from Header')
+    }
+
+    return (
+        <div className='header-container'>
         <div className='header-title-container'>
             {props.title}  
         </div>
         <div className='header-add-meeting-button-container'>
-            <Button />
+            <Button onClick={displayMeetingCreator}/>
         </div>
-    </div>
-);
+        </div>
+    );
+}
 
 export default Header;
  
