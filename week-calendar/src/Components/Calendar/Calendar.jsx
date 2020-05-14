@@ -513,10 +513,11 @@ class Calendar extends Component{
           //Originally returns a default calendar
           //Adds a meeting to a specified when the 'Add a meeting!' button is clicked
           return (
-               <div>
+               //<div>
                     <div className = 'calendar-container'>
                          {this.state.days}
                     </div>
+                    /*
                     <div onClick={() => this.addTimeBlock('Ron Swanson', '1130', '1230', 'tuesday')} >
                          <p>
                               Add a meeting!
@@ -528,7 +529,8 @@ class Calendar extends Component{
                     <div onClick={() => this.deleteTimeBlock('Ron Swanson11301230', 'tuesday')}>
                          Delete Ron's meeting
                     </div>
-               </div>
+                    */
+               //</div>
           );
      };
 }

@@ -79,12 +79,13 @@ describe('Calendar', () => {
         wrapper = mount(<Calendar />);
         //Start at the first day (Monday)
         const dayIndex = 0;
+        const dayId = 'monday';
         //Create an instance of the Calendar component
         let calendar = wrapper.instance();
         //Add 3 different time blocks to the same day with different titles and start and end times
-        calendar.addTimeBlock('Meeting at JJs Diner', '0700', '0800', dayIndex);
-        calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayIndex);
-        calendar.addTimeBlock('Pick up Discount Meat', '2000', '2100', dayIndex);
+        calendar.addTimeBlock('Meeting at JJs Diner', '0700', '0800', dayId);
+        calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayId);
+        calendar.addTimeBlock('Pick up Discount Meat', '2000', '2100', dayId);
         //Get the state of the calendar on a specific day
         const testDay = calendar.state.days[dayIndex]; 
         //Check that there are 15 TimeBlocks after the 3 TimeBlocks have been added
@@ -102,12 +103,13 @@ describe('Calendar', () => {
      //Check that the end time of the previous TimeBlock equals the start time of the next TimeBlock
      it('should match the end time of the previous time block to the start time of the new time block', () => {
          wrapper = mount(<Calendar />);
+         const dayId = 'monday'
          const dayIndex = 0;
          //Create an instance of the Calendar component and add 3 different time blocks to the same day
          let calendar = wrapper.instance();
-         calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayIndex, true);
-         calendar.addTimeBlock('Pick up Discount Meat', '1830', '1900', dayIndex, true);
-         calendar.addTimeBlock('Pick up Discount Meat', '0930', '1000', dayIndex, true);
+         calendar.addTimeBlock('Meeting at Food and Stuff', '1230', '1330', dayId, true);
+         calendar.addTimeBlock('Pick up Discount Meat', '1830', '1900', dayId, true);
+         calendar.addTimeBlock('Pick up Discount Meat', '0930', '1000', dayId, true);
          //Get the state of the calendar on a specific day
          const testDay = calendar.state.days[dayIndex]; 
          //expect(testDay.props.timeBlocks.length).toEqual(13);
@@ -152,14 +154,15 @@ describe('Calendar', () => {
 
     // Test to ensure we do not modify the end times of the preceding TimeBlock if it is not marked as free time.
     it('should not update the end time of a preceding occupied time block.', () => {
+        const dayId = 'tuesday'
         const dayIndex = 1;
         const firstBlockIndex = 0;
         wrapper = mount(<Calendar />);
         let calendar = wrapper.instance();
         // Replace the first time block of the day with an occupied block
-        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayIndex, false);
+        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayId, false);
         // This should add a time in the second slot of the day
-        calendar.addTimeBlock('Meeting with Andy Dwyer', '0830', '0900', dayIndex, false);
+        calendar.addTimeBlock('Meeting with Andy Dwyer', '0830', '0900', dayId, false);
         let previousTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex];
         expect(previousTimeBlock.props.availableTime).toEqual(false);
         expect(previousTimeBlock.props.endTime).toEqual('0900');
@@ -170,13 +173,14 @@ describe('Calendar', () => {
 
     it('should not consume the next time block if the next time block is occupied.', () => {
         const dayIndex = 1;
+        const dayId = 'tuesday';
         const firstBlockIndex = 0;
         wrapper = mount(<Calendar />);
         let calendar = wrapper.instance();
         // Replace the first time block of the day with an occupied block
-        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayIndex, false);
+        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayId, false);
         // This should add a time in the second slot of the day
-        calendar.addTimeBlock('Meeting with Andy Dwyer', '0800', '0900', dayIndex, false);
+        calendar.addTimeBlock('Meeting with Andy Dwyer', '0800', '0900', dayId, false);
         let previousTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex];
         expect(previousTimeBlock.props.title).toEqual('Meeting with Andy Dwyer');
         let newTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex + 1];
@@ -186,13 +190,14 @@ describe('Calendar', () => {
     // Test to ensure we do not modify the start times of the following TimeBlock if it is not marked as free time.
     it('should not update the start time of a following occupied time block.', () => {
         const dayIndex = 1;
+        const dayId = 'tuesday';
         const firstBlockIndex = 0;
         wrapper = mount(<Calendar />);
         let calendar = wrapper.instance();
         // This should add a time in the second slot of the day
-        calendar.addTimeBlock('Meeting with Andy Dwyer', '0830', '0900', dayIndex, false);
+        calendar.addTimeBlock('Meeting with Andy Dwyer', '0830', '0900', dayId, false);
         // Replace the first time block of the day with an occupied block
-        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayIndex, false);
+        calendar.addTimeBlock('Meeting with April Ludgate', '0800', '0900', dayId, false);
         let newTimeBlock = calendar.state.days[dayIndex].props.timeBlocks[firstBlockIndex];
         expect(newTimeBlock.props.availableTime).toEqual(false);
         expect(newTimeBlock.props.endTime).toEqual('0900');
@@ -223,7 +228,7 @@ describe('Calendar', () => {
         const dayId = 'wednesday';
         const dayIndex = 2;
         // Add a new time block to Wednesday
-        calendar.addTimeBlock('Avoiding Michael', '0800', '0930', dayIndex, false);
+        calendar.addTimeBlock('Avoiding Michael', '0800', '0930', dayId, false);
         wrapper.update();
         let wed = wrapper.find('Day').at(dayIndex);
         //console.log('Length of wednesday: ' + wed.length);
@@ -265,7 +270,7 @@ describe('Calendar', () => {
         const dayId = 'wednesday';
         const dayIndex = 2;
         // Add a new time block to Wednesday
-        calendar.addTimeBlock('Avoiding Michael', '0900', '1700', dayIndex, false);
+        calendar.addTimeBlock('Avoiding Michael', '0900', '1700', dayId, false);
         wrapper.update();
         // Change the time block's data
         calendar.updateTimeBlock(timeBlockID, dayId, 'Michael is going home early!', '0900', '1700', false);
@@ -286,7 +291,7 @@ describe('Calendar', () => {
         const dayId = 'wednesday';
         const dayIndex = 2;
         // Add a new time block to Wednesday
-        calendar.addTimeBlock('Avoiding Michael', '0900', '1700', dayIndex, false);
+        calendar.addTimeBlock('Avoiding Michael', '0900', '1700', dayId, false);
         wrapper.update();
         let wed = wrapper.find('Day').at(dayIndex);
         //console.log('Number of days: ' + wrapper.find('Day').length);
@@ -316,7 +321,7 @@ describe('Calendar', () => {
         const dayId = 'wednesday';
         const dayIndex = 2;
         // Add a new time block to Wednesday
-        calendar.addTimeBlock('Avoiding Michael', '0800', '0930', dayIndex, false);
+        calendar.addTimeBlock('Avoiding Michael', '0800', '0930', dayId, false);
         wrapper.update();
         let wed = wrapper.find('Day').at(dayIndex);
 
@@ -355,7 +360,7 @@ describe('Calendar', () => {
         const dayId = 'wednesday';
         const dayIndex = 2;
         // Add a new time block to Wednesday
-        calendar.addTimeBlock('Avoiding Michael', '1100', '1230', dayIndex, false);
+        calendar.addTimeBlock('Avoiding Michael', '1100', '1230', dayId, false);
         wrapper.update();
         let wed = wrapper.find('Day').at(dayIndex);
 
@@ -394,7 +399,7 @@ describe('Calendar', () => {
         const dayId = 'wednesday';
         const dayIndex = 2;
         // Add a new time block to Wednesday
-        calendar.addTimeBlock('Avoiding Michael', '1830', '2000', dayIndex, false);
+        calendar.addTimeBlock('Avoiding Michael', '1830', '2000', dayId, false);
         wrapper.update();
         let wed = wrapper.find('Day').at(dayIndex);
 
