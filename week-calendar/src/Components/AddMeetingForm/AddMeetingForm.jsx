@@ -40,6 +40,8 @@ class AddMeetingForm extends Component {
         this.handleTitle = this.handleTitle.bind(this);
         this.handleParticipants = this.handleParticipants.bind(this);
         this.createMeeting = this.createMeeting.bind(this);
+
+        
     }
 
     fullweek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
@@ -68,7 +70,10 @@ class AddMeetingForm extends Component {
     }
 
     handleDate(date) {
-        this.setState({day: this.fullweek[date.getDay()]});
+        this.setState({
+            day: this.fullweek[date.getDay()],
+            date: date
+        });
     }
 
     handleEndTime(time) {

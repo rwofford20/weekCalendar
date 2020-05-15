@@ -45,6 +45,10 @@ class Header extends Component{
                         aria-controls='simple-menu'
                         aria-haspopup='true'
                         onClick={this.handleMenuClick}
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                        startIcon=""
                     >
                         {this.props.title}
                     </Button>
