@@ -64,7 +64,6 @@ class AddMeetingForm extends Component {
     handleTitle(title) {
         this.setState({title: title});
     }
-    
 
     render() {
         return(
@@ -92,8 +91,26 @@ class AddMeetingForm extends Component {
                 </div>
 
                 <div className="add-meeting-buttons">
-                    <Button>Cancel</Button>
-                    <Button>Create</Button>
+                    <Button
+                            size="small"
+                            variant="outlined"
+                            color="primary"
+                            startIcon=""
+                            //onClick={this.props.displayMeetingCreator}
+                            title='Cancel'
+                    >
+                    Cancel
+                    </Button>
+                    <Button
+                            size="small"
+                            variant="outlined"
+                            color="primary"
+                            startIcon=""
+                            //onClick={this.props.displayMeetingCreator}
+                            title='Create'
+                    >
+                    Create
+                    </Button>
                 </div>
             </div>
         );

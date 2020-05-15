@@ -44,7 +44,3 @@ class Header extends Component{
 }
 
 export default Header;
- 
-//Date picker
-//Group picker
-//Hamburger menu
