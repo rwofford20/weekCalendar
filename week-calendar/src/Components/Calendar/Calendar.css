@@ -1,5 +1,6 @@
 .calendar-container{
     display: flex;
+    /* flex-grow: 1; */
     background: var(--display-background-color);
     height: var(--calendar-container-height);
     width: var(--calendar-container-width);

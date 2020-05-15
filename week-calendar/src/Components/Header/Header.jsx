@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import DatePicker from 'react-datepicker';
-// import Button from '../Button/Button';
-import Button from '@material-ui/core/Button';
 import './Header.css';
 import 'react-datepicker/dist/react-datepicker.css';
+// import Button from '../Button/Button';
+import Button from '@material-ui/core/Button';
+import Icon from '@material-ui/core/Icon';
 
 class Header extends Component{
     constructor(props) {
@@ -31,11 +32,15 @@ class Header extends Component{
                     />
                 </div>
                 <div className='header-add-meeting-button-container'>
-                    <Button variant="contained" color="primary"
+                    <Button
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                        startIcon=""
                         onClick={this.props.displayMeetingCreator}
                         title='Add Meeting'
                     >
-                    Add Meeting
+                    + Add Meeting
                      </Button>
                 </div>
             </div>

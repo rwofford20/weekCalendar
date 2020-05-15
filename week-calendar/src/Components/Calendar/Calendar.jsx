@@ -3,6 +3,8 @@ import Day from '../Day/Day';
 import TimeBlock from '../TimeBlock/TimeBlock';
 import './Calendar.css';
 import { cloneElement } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 
 class Calendar extends Component{
      //Constructor to set the state of the Calendar component
