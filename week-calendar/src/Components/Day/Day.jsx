@@ -10,12 +10,14 @@ class Day extends Component{
     //     super(props);
     //     //this.state = {timeBlocks: generateTimeBlocks(800, 2000)};    
     // };
+
+    
     
     //Returns the props of each TimeBlock associated with a Day
     render = () => {
         return(
-            <div className = 'day-container'>
-                {this.props.timeBlocks}
+            <div className='day-container'>
+                    {this.props.timeBlocks}
          </div>
     )};
 };

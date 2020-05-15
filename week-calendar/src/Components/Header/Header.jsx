@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import {DatePicker} from '@material-ui/pickers';
-import Button from '../Button/Button';
+import 'react-datepicker/dist/react-datepicker.css';
+import Button from '@material-ui/core/Button';
 import './Header.css';
 
 class Header extends Component{
@@ -26,10 +27,16 @@ class Header extends Component{
                     <DatePicker></DatePicker>
                 </div>
                 <div className='header-add-meeting-button-container'>
-                    <Button 
+                    <Button
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                        startIcon=""
                         onClick={this.props.displayMeetingCreator}
                         title='Add Meeting'
-                    />
+                    >
+                    + Add Meeting
+                     </Button>
                 </div>
             </div>
         );

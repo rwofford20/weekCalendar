@@ -4,6 +4,7 @@ import TimeBlock from '../TimeBlock/TimeBlock';
 import './Calendar.css';
 import { cloneElement } from 'react';
 
+
 class Calendar extends Component{
      //Constructor to set the state of the Calendar component
      constructor(props) {
@@ -72,7 +73,7 @@ class Calendar extends Component{
           let timeBlocks = [];
           for (let ndx = 0; ndx < timeArray.length - 1; ndx++) {
                //Do not reset the key anywhere else in the code!
-              timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx} id={ndx} availableTime={true}/>);
+               timeBlocks.push(<TimeBlock title='Title' startTime={timeArray[ndx]} endTime={timeArray[ndx + 1]} key={ndx} id={ndx} availableTime={true} />);
           }
           return timeBlocks;
      };

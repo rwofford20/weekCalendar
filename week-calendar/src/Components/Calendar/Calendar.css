@@ -3,4 +3,6 @@
     background: var(--display-background-color);
     height: var(--calendar-container-height);
     width: var(--calendar-container-width);
+    float: right;
 }
+
