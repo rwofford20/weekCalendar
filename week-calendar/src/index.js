@@ -7,6 +7,7 @@ import './index.css';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 
 // pick a date util library
+// Pro-tip
 //import MomentUtils from '@date-io/moment';
 //import LuxonUtils from '@date-io/luxon';
 import DateFnsUtils from '@date-io/date-fns';
