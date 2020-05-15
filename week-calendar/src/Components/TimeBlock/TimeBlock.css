@@ -1,0 +1,14 @@
+.timeblock-container {
+    outline: 1px dotted royalblue;
+    background-color: lightblue;
+    border-radius: 5px;
+    padding: 2px;
+}
+
+.timeblock-title-container {
+    font-size: .85rem;
+}
+
+.timeblock-time-container {
+    font-size: .85rem;
+}

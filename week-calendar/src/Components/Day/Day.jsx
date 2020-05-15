@@ -16,7 +16,10 @@ class Day extends Component{
     render = () => {
         return(
             <div className='day-container'>
-                <Grid container spacing={3}>
+                <Grid
+                    container
+                    spacing={0}
+                >
                     {this.props.timeBlocks}
                 </Grid>
          </div>
