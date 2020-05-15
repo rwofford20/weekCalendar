@@ -7,8 +7,6 @@ import AddMeetingForm from '../AddMeetingForm/AddMeetingForm';
 import Day from '../Day/Day';
 import TimeBlock from '../TimeBlock/TimeBlock';
 
-
-
 class Schedule extends Component {
     constructor(props) {
         super(props);
@@ -47,7 +45,6 @@ class Schedule extends Component {
     //Input is the number of days to be created
     //Output is is a Day component with 12 default time blocks
     generateDays = (numDays) => {
-         
          let days = [];
          for (let ndx = 0; ndx < numDays; ndx ++) {
               let timeBlocks = this.generateTimeBlocks(this.defaultDayStartTime, this.defaultDayEndTime);

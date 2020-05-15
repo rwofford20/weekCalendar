@@ -94,7 +94,7 @@ class AddMeetingForm extends Component {
     render() {
         return(
             <div className='add-meeting-container'>
-                <h2>Create Meeting</h2>
+                <h4>Create Meeting</h4>
                 <div>
                     <TextField id="standard-basic" label="Title" onChange={this.handleTitle} />
                 </div>
