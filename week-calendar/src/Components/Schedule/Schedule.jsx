@@ -30,8 +30,10 @@ class Schedule extends Component {
                 displayMeetingCreator={this.updateSecondaryDisplay.bind(this, 'Add Meeting')} 
                 title='Meeting Maker'
             />
-            {this.state.secondaryDisplay}
-            <Calendar />
+            <div className="display-container">
+                {this.state.secondaryDisplay}
+                <Calendar />
+            </div>
             </div>
         );
     }

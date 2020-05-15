@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import Grid from '@material-ui/core/Grid';
 //import PropTypes from 'prop-types';
 //import TimeBlock from '../TimeBlock/TimeBlock';
 //import equal from 'fast-deep-equal';
@@ -11,17 +10,14 @@ class Day extends Component{
     //     super(props);
     //     //this.state = {timeBlocks: generateTimeBlocks(800, 2000)};    
     // };
+
+    
     
     //Returns the props of each TimeBlock associated with a Day
     render = () => {
         return(
             <div className='day-container'>
-                <Grid
-                    container
-                    spacing={0}
-                >
                     {this.props.timeBlocks}
-                </Grid>
          </div>
     )};
 };

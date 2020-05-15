@@ -1,3 +1,21 @@
 .day-container {
     outline: 1px solid royalblue;
+    flex-grow: 1;
+    display: grid; 
+    grid-gap:.5px;
+    grid-template-columns: 1fr;
+    grid-template-rows: 
+    [g0800] 1fr [g0815] 1fr [g0830] 1fr [g0845] 1fr
+    [g0900] 1fr [g0915] 1fr [g0930] 1fr [g0945] 1fr 
+    [g1000] 1fr [g1015] 1fr [g1030] 1fr [g1045] 1fr 
+    [g1100] 1fr [g1115] 1fr [g1130] 1fr [g1145] 1fr 
+    [g1200] 1fr [g1215] 1fr [g1230] 1fr [g1245] 1fr 
+    [g1300] 1fr [g1315] 1fr [g1330] 1fr [g1345] 1fr 
+    [g1400] 1fr [g1415] 1fr [g1430] 1fr [g1445] 1fr 
+    [g1500] 1fr [g1515] 1fr [g1530] 1fr [g1545] 1fr 
+    [g1600] 1fr [g1615] 1fr [g1630] 1fr [g1645] 1fr 
+    [g1700] 1fr [g1715] 1fr [g1730] 1fr [g1745] 1fr 
+    [g1800] 1fr [g1815] 1fr [g1830] 1fr [g1845] 1fr 
+    [g1900] 1fr [g1915] 1fr [g1930] 1fr [g1945] 1fr 
+    [g2000] 1fr;
 }

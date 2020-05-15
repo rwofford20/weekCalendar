@@ -4,7 +4,6 @@ import './Header.css';
 import 'react-datepicker/dist/react-datepicker.css';
 // import Button from '../Button/Button';
 import Button from '@material-ui/core/Button';
-import Icon from '@material-ui/core/Icon';
 
 class Header extends Component{
     constructor(props) {
