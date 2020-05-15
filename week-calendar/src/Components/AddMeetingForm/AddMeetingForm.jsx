@@ -68,7 +68,7 @@ class AddMeetingForm extends Component {
         return(
             <div className='add-meeting-container'>
                 <div>
-                    <TextField id="standard-basic" label="Title" onChange={this.handleTitle} value={this.state.title} />
+                    <TextField id="standard-basic" label="Title" onChange={this.handleTitle} />
                 </div>
                 <div className='date-picker-container'>
                     <DatePicker onChange={this.handleDate} value ={this.state.date} />   
