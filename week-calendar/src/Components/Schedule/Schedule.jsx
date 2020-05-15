@@ -22,7 +22,6 @@ class Schedule extends Component {
             timeBlocksForDays: defaultTimeBlocksForDays,
             days: this.generateDays(5)
         };
-        //this.generateDummyMeetings();
         this.updateSecondaryDisplay = this.updateSecondaryDisplay.bind(this);
     }
 
@@ -49,7 +48,6 @@ class Schedule extends Component {
                'Compression Coil Maint',
                'Re: Vera',
                'YoSaffBridge',
-               'Dinner',
                'Breakfast',
                'Second Breakfast',
                'Elevenses',
@@ -57,7 +55,6 @@ class Schedule extends Component {
                'Mt. Doom',
                'Tea',
                'Supper',
-               'Dinner'
           ];
 
           const startTimes = [
@@ -72,15 +69,14 @@ class Schedule extends Component {
                '1200',
                '1400',
                '1500',
-               '1700',
-               '1800'
+               '1700'
           ];
 
           const endTimes = [
                '0915',
-               '1200',
-               '1130',
-               '1160',
+               '1145',
+               '1300',
+               '1500',
                '1730',
                '0900',
                '1000',
@@ -89,7 +85,6 @@ class Schedule extends Component {
                '1415',
                '1530',
                '1800',
-               '1900'
           ];
 
           const days=[
@@ -105,15 +100,10 @@ class Schedule extends Component {
                'tuesday',
                'tuesday',
                'tuesday',
-               'tuesday',
           ];
           for (let ndx = 0; ndx < days.length; ndx++) {
                this.addTimeBlock(titles[ndx], startTimes[ndx], endTimes[ndx], days[ndx]);
           }
-     }
-
-     onComponentDidMount() {
-          this.generateDummyMeetings();
      }
 
     //Function to generate a Day component 
@@ -599,6 +589,7 @@ class Schedule extends Component {
         return (
             <div className='schedule-container'>
             <Header
+               uploadMeetings={this.generateDummyMeetings.bind(this)}
                displayMeetingCreator={this.updateSecondaryDisplay.bind(this, 
                     <AddMeetingForm
                         addMeeting={this.addTimeBlock.bind(this) }   

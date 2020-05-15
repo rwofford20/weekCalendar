@@ -18,6 +18,7 @@ class Header extends Component{
         this.handleMenuClick = this.handleMenuClick.bind(this);
         this.handleMenuClose = this.handleMenuClose.bind(this);
         this.handleMenuAddMeeting = this.handleMenuAddMeeting.bind(this);
+        this.handleMenuUpload = this.handleMenuUpload.bind(this);
     }
 
     handleDate(date) {
@@ -35,6 +36,11 @@ class Header extends Component{
     handleMenuAddMeeting() {
         this.handleMenuClose();
         this.props.displayMeetingCreator();
+    }
+
+    handleMenuUpload() {
+        this.handleMenuClose();
+        this.props.uploadMeetings();
     }
 
     render() {
@@ -59,7 +65,7 @@ class Header extends Component{
                         open={Boolean(this.state.anchorElement)}
                         onClose={this.handleMenuClose}
                     >
-                        <MenuItem onClick={this.handleMenuClose}>Upload Schedule</MenuItem>
+                        <MenuItem onClick={this.handleMenuUpload}>Upload Schedule</MenuItem>
                         <MenuItem onClick={this.handleMenuAddMeeting}>Add Meeting</MenuItem>
                         <MenuItem onClick={this.handleMenuClose}>Generate Meetings</MenuItem>
                         <MenuItem onClick={this.handleMenuClose}>Login</MenuItem>
