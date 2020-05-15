@@ -6,11 +6,6 @@ class Header extends Component{
     constructor(props) {
         super(props);
         this.dummy = "Header dummy value";
-        this.displayMeetingCreator = this.displayMeetingCreator.bind(this);
-    }
-
-    displayMeetingCreator() {
-        
     }
 
     render() {
@@ -20,7 +15,7 @@ class Header extends Component{
                     {this.props.title}  
                 </div>
                 <div className='header-add-meeting-button-container'>
-                    <Button onClick={this.displayMeetingCreator}/>
+                    <Button onClick={this.props.displayMeetingCreator}/>
                 </div>
             </div>
         );
