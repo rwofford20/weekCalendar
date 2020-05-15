@@ -26,6 +26,7 @@ class AddMeetingForm extends Component {
                 "Jayne Cobb"
             ],
             date: new Date(),
+            day: '',
             endTime: null,
             participants: [],
             //selectedPerson: null,
@@ -41,6 +42,7 @@ class AddMeetingForm extends Component {
         this.createMeeting = this.createMeeting.bind(this);
     }
 
+    fullweek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
     //Function to convert integer time values to a string and add a leading zero if necessary
     //Used in generateTimes function
     //Input is an integer value
@@ -55,18 +57,18 @@ class AddMeetingForm extends Component {
 
     createMeeting() {
         //title, startTime, endTime, dayID
-        console.log('title: ' + this.state.title + ' start: ' +  this.state.startTime + ' end: ' + this.state.endTime);
-        let title = 'new title';
+        console.log('Selected day: ' + this.state.date);
+        let title = this.state.title;
+        let dayOfWeek = this.state.day;
         let startTime = this.convertTimeToString((this.state.startTime.getHours())*100 
             + (Math.floor(this.state.startTime.getMinutes() / 15))*15);
         let endTime = this.convertTimeToString((this.state.endTime.getHours())*100 
         + (Math.floor(this.state.endTime.getMinutes() / 15))*15);
-        console.log('title: ' + title + ' start: ' +  startTime + ' end: ' + endTime)
-        this.props.addMeeting(title, startTime, endTime, 'tuesday');
+        this.props.addMeeting(title, startTime, endTime, dayOfWeek);
     }
 
     handleDate(date) {
-        this.setState({date: date});
+        this.setState({day: this.fullweek[date.getDay()]});
     }
 
     handleEndTime(time) {
@@ -85,18 +87,19 @@ class AddMeetingForm extends Component {
         this.setState({startTime: time});
     }
 
-    handleTitle(title) {
-        this.setState({title: title.text});
+    handleTitle(e) {
+        this.setState({title: e.target.value});
     }
 
     render() {
         return(
             <div className='add-meeting-container'>
+                <h2>Create Meeting</h2>
                 <div>
                     <TextField id="standard-basic" label="Title" onChange={this.handleTitle} />
                 </div>
                 <div className='date-picker-container'>
-                    <DatePicker onChange={this.handleDate} value ={this.state.date} />   
+                    <DatePicker onChange={this.handleDate} value ={this.state.date} onChange={this.handleDate} />   
                 </div>
                 <div className="startTimePicker-container">
                     <TimePicker ampm={false} label='Start time:' onChange={this.handleStartTime} value={this.state.startTime} />  
