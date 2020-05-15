@@ -26,7 +26,10 @@ class Schedule extends Component {
     render () {
         return (
             <div className='schedule-container'>
-            <Header displayMeetingCreator={this.updateSecondaryDisplay.bind(this, 'Add Meeting')} />
+            <Header 
+                displayMeetingCreator={this.updateSecondaryDisplay.bind(this, 'Add Meeting')} 
+                title='Meeting Maker'
+            />
             {this.state.secondaryDisplay}
             <Calendar />
             </div>
