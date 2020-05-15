@@ -37,8 +37,7 @@ class AddMeetingForm extends Component {
         this.handleEndTime = this.handleEndTime.bind(this);
         this.handleStartTime = this.handleStartTime.bind(this);
         this.handleTitle = this.handleTitle.bind(this);
-        this.handleParticipants = this.handleParticipants.bind(this);
-        
+        this.handleParticipants = this.handleParticipants.bind(this);  
     }
 
     handleDate(date) {
@@ -62,7 +61,7 @@ class AddMeetingForm extends Component {
     }
 
     handleTitle(title) {
-        this.setState({title: title});
+        this.setState({title: title.text});
     }
 
     render() {

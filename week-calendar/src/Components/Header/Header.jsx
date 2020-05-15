@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import {DatePicker} from '@material-ui/pickers';
-import 'react-datepicker/dist/react-datepicker.css';
 import Button from '@material-ui/core/Button';
 import './Header.css';
 
@@ -8,14 +7,13 @@ class Header extends Component{
     constructor(props) {
         super(props);
         this.dummy = "Header dummy value";
-        this.state = {startDate: new Date()};
+        this.state = {date: new Date()};
+        this.handleDate = this.handleDate.bind(this);
     }
 
-    handleChange = date => {
-        this.setState({
-          startDate: date
-        });
-      };
+    handleDate(date) {
+        this.setState({date: date});
+    }
 
     render() {
         return (
@@ -24,7 +22,7 @@ class Header extends Component{
                     {this.props.title}  
                 </div>
                 <div className='date-picker-container'>
-                    <DatePicker></DatePicker>
+                    <DatePicker onChange={this.handleDate} value ={this.state.date} />   
                 </div>
                 <div className='header-add-meeting-button-container'>
                     <Button
