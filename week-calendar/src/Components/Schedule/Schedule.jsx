@@ -22,6 +22,7 @@ class Schedule extends Component {
             timeBlocksForDays: defaultTimeBlocksForDays,
             days: this.generateDays(5)
         };
+        //this.generateDummyMeetings();
         this.updateSecondaryDisplay = this.updateSecondaryDisplay.bind(this);
     }
 
@@ -39,6 +40,81 @@ class Schedule extends Component {
     defaultDayStartTime = 800;
     defaultDayEndTime = 2000;
     defaultTimeBlockTitle = '';
+
+     generateDummyMeetings() {
+          console.log('Importing meetings to schedule!');
+          const titles = [
+               'Pretty Floral Bonnets',
+               'Shiny',
+               'Compression Coil Maint',
+               'Re: Vera',
+               'YoSaffBridge',
+               'Dinner',
+               'Breakfast',
+               'Second Breakfast',
+               'Elevenses',
+               'Lunch',
+               'Mt. Doom',
+               'Tea',
+               'Supper',
+               'Dinner'
+          ];
+
+          const startTimes = [
+               '0900',
+               '1030',
+               '1215',
+               '1400',
+               '1615',
+               '0800',
+               '0900',
+               '1100',
+               '1200',
+               '1400',
+               '1500',
+               '1700',
+               '1800'
+          ];
+
+          const endTimes = [
+               '0915',
+               '1200',
+               '1130',
+               '1160',
+               '1730',
+               '0900',
+               '1000',
+               '1145',
+               '1300',
+               '1415',
+               '1530',
+               '1800',
+               '1900'
+          ];
+
+          const days=[
+               'monday',
+               'monday',
+               'monday',
+               'monday',
+               'monday',
+               'tuesday',
+               'tuesday',
+               'tuesday',
+               'tuesday',
+               'tuesday',
+               'tuesday',
+               'tuesday',
+               'tuesday',
+          ];
+          for (let ndx = 0; ndx < days.length; ndx++) {
+               this.addTimeBlock(titles[ndx], startTimes[ndx], endTimes[ndx], days[ndx]);
+          }
+     }
+
+     onComponentDidMount() {
+          this.generateDummyMeetings();
+     }
 
     //Function to generate a Day component 
     //Used in the Calendar constructor
@@ -100,7 +176,7 @@ class Schedule extends Component {
          // TODO: Update key generation for when data is passed in from the database.
          let key = title+startTime+endTime;
          const newTimeBlock = <TimeBlock title={title} startTime={startTime} endTime={endTime} key={key} id={key} availableTime={availableTime}/>;
-         console.log('Adding a time block starting at ' + newTimeBlock.props.startTime + ' and ending at ' + newTimeBlock.props.endTime + 'on the day' + dayID + ' with availableTime set to ' + newTimeBlock.props.availableTime);
+         console.log('Adding a time block starting at ' + newTimeBlock.props.startTime + ' and ending at ' + newTimeBlock.props.endTime + ' on the day ' + dayID + ' with availableTime set to ' + newTimeBlock.props.availableTime);
          let dayIndex = 0;
          while (this.state.days[dayIndex].props.id !== dayID) {
               dayIndex++;
@@ -522,12 +598,12 @@ class Schedule extends Component {
     render () {
         return (
             <div className='schedule-container'>
-            <Header 
-                displayMeetingCreator={this.updateSecondaryDisplay.bind(this, 
+            <Header
+               displayMeetingCreator={this.updateSecondaryDisplay.bind(this, 
                     <AddMeetingForm
                         addMeeting={this.addTimeBlock.bind(this) }   
                     />)} 
-                title='Meeting Maker'
+               title='Meeting Maker'
             />
             <div className="display-container">
                 {this.state.secondaryDisplay}

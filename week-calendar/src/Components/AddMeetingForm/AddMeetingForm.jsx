@@ -104,7 +104,7 @@ class AddMeetingForm extends Component {
                     <TextField id="standard-basic" label="Title" onChange={this.handleTitle} />
                 </div>
                 <div className='date-picker-container'>
-                    <DatePicker onChange={this.handleDate} value ={this.state.date} onChange={this.handleDate} />   
+                    <DatePicker onChange={this.handleDate} value ={this.state.date} />   
                 </div>
                 <div className="startTimePicker-container">
                     <TimePicker ampm={false} label='Start time:' onChange={this.handleStartTime} value={this.state.startTime} />  
