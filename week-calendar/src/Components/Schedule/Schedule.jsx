@@ -3,6 +3,7 @@ import './Schedule.css';
 import Header from '../Header/Header';
 import SecondaryDisplay from '../SecondaryDisplay/SecondaryDisplay';
 import Calendar from '../Calendar/Calendar';
+import AddMeetingForm from '../AddMeetingForm/AddMeetingForm';
 
 class Schedule extends Component {
     constructor(props) {
@@ -19,7 +20,6 @@ class Schedule extends Component {
                     {stuffToDisplay}
                 </SecondaryDisplay>
             }
-
         });
     }
 
@@ -27,7 +27,7 @@ class Schedule extends Component {
         return (
             <div className='schedule-container'>
             <Header 
-                displayMeetingCreator={this.updateSecondaryDisplay.bind(this, 'Add Meeting')} 
+                displayMeetingCreator={this.updateSecondaryDisplay.bind(this, <AddMeetingForm/>)} 
                 title='Meeting Maker'
             />
             {this.state.secondaryDisplay}

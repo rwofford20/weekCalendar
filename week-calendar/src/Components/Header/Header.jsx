@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import DatePicker from '@material-ui/pickers/DatePicker';
+import {DatePicker} from '@material-ui/pickers';
 import Button from '../Button/Button';
 import './Header.css';
 
@@ -23,10 +23,7 @@ class Header extends Component{
                     {this.props.title}  
                 </div>
                 <div className='date-picker-container'>
-                    <DatePicker
-                        selected={this.state.startDate}
-                        onChange={this.handleChange} 
-                    />
+                    <DatePicker></DatePicker>
                 </div>
                 <div className='header-add-meeting-button-container'>
                     <Button 
