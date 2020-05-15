@@ -23,7 +23,8 @@ class AddMeetingForm extends Component {
                 <TimePicker></TimePicker>
             </div>
             <div className="add-meeting-buttons">
-                
+                <Button>Cancel</Button>
+                <Button>Create</Button>
             </div>
 
 

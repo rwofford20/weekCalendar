@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
-import DatePicker from 'react-datepicker';
+import DatePicker from '@material-ui/pickers/DatePicker';
 import Button from '../Button/Button';
 import './Header.css';
-import 'react-datepicker/dist/react-datepicker.css';
 
 class Header extends Component{
     constructor(props) {
