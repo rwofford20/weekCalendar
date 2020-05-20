@@ -1,6 +1,8 @@
-.secondary-display-container{
-    outline: 2px dotted goldenrod;
+.secondary-display-container {
+    /* outline: 2px dotted goldenrod; */
     height: 76vh;
     flex-basis: 16rem;
     flex-grow: 3;
+    padding-left: 1em;
+    padding-right: 1em;
 }

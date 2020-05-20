@@ -1,5 +1,5 @@
-import React, {Component} from 'react';
-import {DatePicker, TimePicker} from '@material-ui/pickers';
+import React, { Component } from 'react';
+import { DatePicker, TimePicker } from '@material-ui/pickers';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Autocomplete from '@material-ui/lab/Autocomplete';
@@ -12,8 +12,8 @@ import './AddMeetingForm.css';
 class AddMeetingForm extends Component {
     constructor(props) {
         super(props);
-        
-        this.state= {
+
+        this.state = {
             availablePeople: [
                 "Malcolm Reynolds",
                 "Zoe Washburne",
@@ -41,7 +41,7 @@ class AddMeetingForm extends Component {
         this.handleParticipants = this.handleParticipants.bind(this);
         this.createMeeting = this.createMeeting.bind(this);
 
-        
+
     }
 
     fullweek = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
@@ -55,17 +55,17 @@ class AddMeetingForm extends Component {
             timeString = '0' + timeString;
         }
         return timeString;
-   };
+    };
 
     createMeeting() {
         //title, startTime, endTime, dayID
         console.log('Selected day: ' + this.state.date);
         let title = this.state.title;
         let dayOfWeek = this.state.day;
-        let startTime = this.convertTimeToString((this.state.startTime.getHours())*100 
-            + (Math.floor(this.state.startTime.getMinutes() / 15))*15);
-        let endTime = this.convertTimeToString((this.state.endTime.getHours())*100 
-        + (Math.floor(this.state.endTime.getMinutes() / 15))*15);
+        let startTime = this.convertTimeToString((this.state.startTime.getHours()) * 100
+            + (Math.floor(this.state.startTime.getMinutes() / 15)) * 15);
+        let endTime = this.convertTimeToString((this.state.endTime.getHours()) * 100
+            + (Math.floor(this.state.endTime.getMinutes() / 15)) * 15);
         this.props.addMeeting(title, startTime, endTime, dayOfWeek);
     }
 
@@ -77,46 +77,46 @@ class AddMeetingForm extends Component {
     }
 
     handleEndTime(time) {
-        this.setState({endTime: time});
+        this.setState({ endTime: time });
     }
 
     handleParticipants(person) {
         let newParticipants = this.state.participants;
         newParticipants.push(person);
-        this.setState({participants: newParticipants});
+        this.setState({ participants: newParticipants });
         //this.setState({selectedPerson: null});
         console.log('handleParticipants added ' + person + ' to ' + this.state.participants);
     }
 
     handleStartTime(time) {
-        this.setState({startTime: time});
+        this.setState({ startTime: time });
     }
 
     handleTitle(e) {
-        this.setState({title: e.target.value});
+        this.setState({ title: e.target.value });
     }
 
     render() {
-        return(
+        return (
             <div className='add-meeting-container'>
                 <h4>Create Meeting</h4>
                 <div>
                     <TextField id="standard-basic" label="Title" onChange={this.handleTitle} />
                 </div>
                 <div className='date-picker-container'>
-                    <DatePicker onChange={this.handleDate} value ={this.state.date} />   
+                    <DatePicker onChange={this.handleDate} value={this.state.date} />
                 </div>
                 <div className="startTimePicker-container">
-                    <TimePicker ampm={false} label='Start time:' onChange={this.handleStartTime} value={this.state.startTime} />  
+                    <TimePicker ampm={false} label='Start time:' onChange={this.handleStartTime} value={this.state.startTime} />
                 </div>
                 <div className="endTimePicker-container">
-                    <TimePicker ampm={false} label='End time:' onChange={this.handleEndTime} value={this.state.endTime} />  
+                    <TimePicker ampm={false} label='End time:' onChange={this.handleEndTime} value={this.state.endTime} />
                 </div>
                 <div>
-                    <Autocomplete 
-                        multiple 
+                    <Autocomplete
+                        multiple
                         limitTags={5}
-                        options={this.state.availablePeople} 
+                        options={this.state.availablePeople}
                         renderInput={(params) => <TextField {...params} label="Choose Participants" />}
                         onChange={this.handleParticipants}
                     />
@@ -124,24 +124,24 @@ class AddMeetingForm extends Component {
 
                 <div className="add-meeting-buttons">
                     <Button
-                            size="small"
-                            variant="outlined"
-                            color="primary"
-                            startIcon=""
-                            //onClick={this.createMeeting}
-                            title='Cancel'
+                        size="small"
+                        variant="outlined"
+                        color="secondary"
+                        startIcon=""
+                        //onClick={this.createMeeting}
+                        title='Cancel'
                     >
-                    Cancel
+                        Cancel
                     </Button>
                     <Button
-                            size="small"
-                            variant="outlined"
-                            color="primary"
-                            startIcon=""
-                            onClick={this.createMeeting}
-                            title='Create'
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                        startIcon=""
+                        onClick={this.createMeeting}
+                        title='Create'
                     >
-                    Create
+                        Create
                     </Button>
                 </div>
             </div>

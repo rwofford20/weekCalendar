@@ -1,4 +1,7 @@
 .display-container {
     display: flex;
-    
+}
+
+.date-picker-container > .MuiFormControl-root > .MuiInput-formControl > .MuiInputBase-input{
+    cursor: pointer;
 }
